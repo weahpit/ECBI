@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{#{% if (type_doc == 1) %}#}
+{% block title %} ECBI | Validation de proformas {% endblock %}
+{% block page_titre %} Validation de proformas {% endblock %}
+
+{% block body %}
+    <style>
+        .drop-zone {
+            border: 2px dashed #0078d7;
+            border-radius: 10px;
+            padding: 80px;
+            text-align: center;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .drop-zone.dragover {
+            background: #e6f0ff;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0;
+            padding: 1px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #c5c6c5;
+            font-size: 12px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-preview {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="container encadrement text-center mt-1 mx-auto bg-light p-2" id="divDocs" style="border-top: 4px solid #ebbb01">
+            <img class="mt-2" src="{{asset('assets/images/oops_.png')  }}" height="256" alt="" style="margin-left:auto;margin-right:auto;">
+            <h1 class="text-center text-danger mt-2 p-1" style="background: #f7f0d4;border: 1px solid #fdd637"> Vous n'êtes pas autoriser à accéder à cette rubrique  !</h1>
+            <button class="btn-primary mt-2 p-1" onclick="document.location.href = document.referrer;" style="background: radial-gradient(#2563EB, #3b82f6);border:0;width:200px;color:white;">Retour</button>
+        </div>
+{% endblock %}

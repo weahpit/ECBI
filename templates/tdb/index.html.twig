@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ECBI | Tableau de bord{% endblock %}
+{% block page_titre %}<img class="me-2" src="{{ asset('assets/icons/dashboard.png') }}" alt=""> Tableau de bord{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card p-3 mb-4">
+                <h5 class="card-title"><i class="fa-solid fa-file-invoice icon text-success"></i> Proforma</h5>
+                <p class="card-text"><span class="fw-bold ps-5">{{ pf_attente }}</span> en attente.</p>
+                <p class="card-text"><span class="fw-bold ps-5">{{ pf_validees }}</span> validées.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 mb-4">
+                <h5 class="card-title"><i class="fa-solid fa-truck icon text-warning"></i> Livraisons</h5>
+                <p class="card-text">5 camions en cours de route.</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 mb-4">
+                <h5 class="card-title"><i class="fa-solid fa-users icon"></i> Clients</h5>
+                <p class="card-text"><span class="fw-bold">{{ clients }}</span> clients actifs.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

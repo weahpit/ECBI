@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paramètres{% endblock %}
+{% block page_titre %}⚙️ Paramètres{% endblock %}
+{% block body %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .div_height {
+            min-height: 200px;
+        }
+        #sideMenu {
+            width: 250px; /* largeur par défaut */
+            transition: width 0.3s ease, padding 0.3s ease;
+        }
+
+        #sideMenu.collapsed {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+
+        #mainContent {
+            flex-grow: 1;
+            transition: margin-left 0.7s ease;
+        }
+
+        #sideMenu.collapsed + #mainContent {
+            margin-left: 0 !important;
+        }
+
+        .w-60 {
+            width: 60%;
+        }
+        .w-30 {
+            width: 30%;
+        }
+        .w-35 {
+            width: 35%;
+        }
+        .w-45 {
+            width: 45%;
+        }
+        input{
+            border: #fdd637 1px solid;
+            transition: background-color 0.5s ease;
+        }
+        /* Transition douce sur la couleur de fond */
+        .check-input {
+            transition: background-color 0.5s ease;
+        }
+
+        /* Quand le champ est valide (rempli) */
+        .check-input:valid {
+            background-color: #ccffcc; /* vert clair adorable */
+        }
+
+    </style>
+    <button id="toggleMenu" class="btn btn-light border mb-2">
+        <i class="fa-solid fa-bars me-2"></i>Menu
+    </button>
+    <div class="d-flex p-4 encadrement">
+        <!-- Inclure Font Awesome -->
+        <div id="sideMenu" class="list-group p-2" style="background:#f8f9fa; color:#333;">
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabReferences">
+                <i class="fa-solid fa-user"></i> Données de références
+            </button>
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabUtilisateurs">
+                <i class="fa-solid fa-users-gear"></i> Utilisateurs
+            </button>
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabGroupes">
+                <i class="fa-solid fa-users-gear"></i> Groupes et Permissions
+            </button>
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabNotifications">
+                <i class="fa-solid fa-bell"></i> Alertes / Notifications
+            </button>
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabLogs">
+                <i class="fa-solid fa-newspaper"></i> Journal de connexion
+            </button>
+
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabOptions">
+                <i class="fa-solid fa-toolbox"></i> Options
+            </button>
+        </div>
+
+        <!-- Contenu à droite -->
+        <div id="mainContent" class="tab-content flex-grow-1 p-1 ms-2 bg-white" style="border:2px solid #fdd637;">
+            <div class="tab-pane fade show" id="tabReferences">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Données de Références</h2>
+                {% include 'parametres/references.html.twig'%}
+            </div>
+            <div class="tab-pane fade" id="tabUtilisateurs">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Utilisateurs ECBI</h2>
+                {% include 'parametres/users.html.twig' %}
+            </div>
+            <div class="tab-pane fade" id="tabGroupes">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Gestion des groupes</h2>
+                {% include 'parametres/groupes.html.twig' %}
+            </div>
+            <div class="tab-pane fade" id="tabNotifications">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-2 pb-2" style="background: #dddcdc"><img src="{{ asset('assets/icons/notification.png') }}" class="me-2" alt="notification">Alertes / Notifications</h2>
+                {% include 'parametres/notifications.html.twig' %}
+            </div>
+            <div class="tab-pane fade" id="tabLogs">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Journaux de Connexion</h2>
+            </div>
+            <div class="tab-pane fade" id="tabOptions">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Options de l'application</h2>
+                {% include 'parametres/options.html.twig' %}
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById("toggleMenu");
+            const sideMenu = document.getElementById("sideMenu");
+            const icon = toggleBtn.querySelector("i");
+
+            toggleBtn.addEventListener("click", function() {
+                sideMenu.classList.toggle("collapsed");
+
+                if (sideMenu.classList.contains("collapsed")) {
+                    icon.classList.remove("fa-bars");
+                    icon.classList.add("fa-arrow-right");
+                } else {
+                    icon.classList.remove("fa-arrow-right");
+                    icon.classList.add("fa-bars");
+                }
+            });
+        });
+    </script>
+{% endblock %}

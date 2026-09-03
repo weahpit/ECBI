@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+{#{% if (type_doc == 1) %}#}
+{% block title %} ECBI | Validation Proforma N° {{ doc.numeroProforma }}{% endblock %}
+{% block page_titre %}📦 Commandes Clients{% endblock %}
+    {#{% else %}
+{% block title %} ECBI | Validation Proforma {% endblock %}
+    {% block page_titre %}📦 Commandes Clients {% endblock %}
+{% endif %}#}
+
+{% block body %}
+    <style>
+        .drop-zone {
+            border: 2px dashed #0078d7;
+            border-radius: 10px;
+            padding: 80px;
+            text-align: center;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .drop-zone.dragover {
+            background: #e6f0ff;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0;
+            padding: 1px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #c5c6c5;
+            font-size: 12px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-preview {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="container encadrement mt-1 mx-auto bg-light p-2" id="divDocs" style="border-top: 4px solid #ebbb01">
+        {#<p class="loading-text text-center">Chargement des données…</p>#}
+    </div>{##}
+
+    <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/validation_doc.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+
+
+    <script>
+        let type_doc = "{{ type_doc }}"
+        window.addEventListener("load", () => {
+                loadDocumentInfos(document.getElementById("divDocs"))
+        } )
+        function getInfos(control){
+            {% if (doc.etat) %}
+            control.innerHTML =`
+                        <div class="container text-center mx-auto">
+                        <img class="mt-2" src="{{asset('assets/images/oops.png')  }}" alt="" style="margin-left:auto;margin-right:auto;">
+                        <h1 class="text-center text-danger mt-2 p-1" style="background: #f7f0d4;border: 1px solid #fdd637"> Cette proforma  a déja été validée !</h1>
+                        <button class="btn-primary mt-2 p-1" onclick="document.location.href = document.referrer;" style="background: radial-gradient(#2563EB, #3b82f6);border:0;width:200px;color:white;">Retour</button>
+                        `
+            {% else  %}
+            {% if (type_doc == 1) %}
+                control.innerHTML = `
+                <h3 class="fw-light  w-100 p-1 ps-4" style="background: #c5c6c5;color:black;"><img class="me-2 mb-2" src="{{ asset('assets/icons/validation_proforma.png') }}" alt="validation_doc">Validation  proforma N° <span class="text-dark fw-bold">{{ doc.numeroProforma}} </span></h3>
+                <div class="d-inline-flex mt-2 text-center" style="margin-left: auto;margin-right: auto;">
+                    <button class="btn-danger fw-light btn_reject_proforma" style="border-radius:0;border:0; background:#B0413E;color: white;padding-left:15px;padding-right:15px;padding-top:6px;padding-bottom:6px;" id="{{ doc.id }}" type="button">Rejeter</button>
+                    <button class="btn-primary fw-light ms-2 btn_accept_proforma" style="border-radius:0;border:0; background:#3e6cb0;color: white;padding-left:15px;padding-right:15px;padding-top:6px;padding-bottom:6px;" id="{{ doc.id }}"  type="button">Accepter</button>
+                </div>
+                <hr>
+                <div>
+                <fieldset class="bg-white mb-2">
+                                <legend class="fw-light h6"><u>Proforma</u></legend>
+                                <div class="row">
+                                    <div class="ps-4 col-4" style="font-size:13px;">
+                                        <h6 class="mb-1 w-100" style="width:125px;color:darkred;"><span class="badge bg-warning text-dark border border-1 border-white fw-bold"> {{ doc.codeClient.rsClient}}</span></h6>
+                                        <h4 class="mb-1"  style="width:125px;color:darkred;"><span class="fw-bold"> {{ doc.codeClient.sigle}}</span></h4><br>
+                                        <div class="mt-2 p-2 " style="border:1px solid lightgray;border-top: 2px solid darkgrey;"><label style="width:125px;">N° Commande</label>:<span class="fw-bold text-danger"> {{ doc.numeroProforma}}</span><br>
+                                        <label style="width:125px;">Date</label>:<span class="fw-bold"> {{ doc.dateProforma |date('d/m/Y')}}</span><br>
+                                        <label style="width:125px;">Commercial</label>:<span class="fw-bold"> {{ doc.createdBy}}</span><br>
+                                        <label style="width:125px;">Conditions</label>:<span class="fw-bold"> {{doc.conditions}}</span><br>
+                                        <label style="width:125px;">Validité</label>:<span class="fw-bold"><span class="text-danger"> {{doc.dureeValidite}} jour(s)</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                    <h6 class="fw-bold"><u>Produits</u></h6>
+                                        <table class="table-hover w-100" style="border: 1px solid #e5e5e5;width: 95%;">
+                                               <thead>
+                                                   <tr class="w-100">
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Désignation</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">PU</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Qte</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Total</th>
+                                                    </tr>
+                                               </thead>
+                                               <tbody class="commande_tbody">
+                                               {%for ligne in doc.ligneProformas%}
+                                                    <tr style="font-size: 13px;">
+                                                        <td>   {{ ligne.codeProduit.libelle  }} </td>
+                                                        <td>   {{ ligne.prix  }} </td>
+                                                        <td>   {{ ligne.qte  }} </td>
+                                                        <td>   {{ ligne.total  }}</td>
+                                                    </tr>
+                                               {% endfor %}
+                                               </tbody>
+                                        </table>
+                                        <hr>
+                                        <div class="" style="display: flex;justify-content: flex-end;">
+                                            <div id="div_montant" style="float: right;margin-right: 20px;">
+                                                    <label style="width:125px;">Montant HT</label>:<span class="fw-bold ms-1" style="font-size: 14px;">{{ doc.totalHt}} F CFA</span><br>
+                                                    <label style="width:125px;">TVA</label>:<span class="fw-bold ms-1" style="font-size: 14px;">{{ doc.tva}} F CFA</span><br>
+                                                    <label style="width:125px;">Remise</label>:<span class="fw-bold ms-1" style="font-size: 14px;">({{ doc.tauxRemise}}%) {{ doc.remise}} F CFA</span><br>
+                                                    <label style="width:125px;">Montant TTC</label>:<span class="badge bg-danger text-white fw-bold" style="font-size: 14px;">{{ doc.netAPayer}} F CFA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                </div>
+            `
+            {% else%}
+                control.innerHTML = `
+                <h2 class="text-light fw-light  w-100 p-1 ps-4" style="background: #7d7c7c;">Validation sur la proforma {{ doc.numeroCommande}} </h5>
+            `
+            {% endif%}
+            {% endif%}
+
+        }
+        $("body").on('click','.btn_accept_proforma',  function (){
+            $.ajax({
+                url : '/acceptProforma/' + this.id,
+                success : function(response){
+                    render_toast_value(response.msg, response.code)
+                    if (response.code === 1){
+                        document.location.href = '{{ path('app_proforma') }}'
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}

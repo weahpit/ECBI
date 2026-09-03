@@ -1,0 +1,143 @@
+<style>
+    .border-input {
+        border: 1px solid #afada8;
+        padding-left: 10px;
+        background: radial-gradient(white,white,#f3f3f3);
+    }
+    input, select {
+        width: 200px;
+    }
+</style>
+<div class="row m-2" style="min-height: 300px;border: 1px solid lightgrey;">
+    <div class="col-4 p-2">
+        <h6 class="fw-light  p-1 alert-secondary" id="userLabel"><i class="fa fa-user me-2"></i> Nouvel utilisateur</h6>
+        <div style="font-size: 13px;">
+            <form id="formUsers">
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="nom" style="width: 130px;">Titre</label><select class="border-input"  id="titre">
+                        <option value="Mr">Mr</option>
+                        <option value="Mme">Mme</option>
+                        <option value="Mlle">Mlle</option>
+                    </select></div>
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="nom" style="width: 130px;">Nom</label><input class="border-input"  type="text" id="nom" placeholder="Nom" required style="text-transform: uppercase;"></div>
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="prenoms" style="width: 130px;">Prénoms</label><input class="border-input"  type="text" id="prenoms" placeholder="Prénoms" required style="text-transform: uppercase;"></div>
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="email" style="width: 130px;">Email</label><input class="border-input"  type="email" id="email_user" placeholder="email" required></div>
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="mobile" style="width: 130px;">N° mobile</label><input class="border-input"  type="text" id="mobile_user"  required></div>
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="serviceEcbi" style="width: 130px;">Servuice</label><select class="border-input"  id="serviceEcbi" style="max-width: 200px;"></select></div>
+                <div class="w-100 input-group mb-2"><label class="fw-bold" for="poste" style="width: 130px;">Poste / Fonction</label><input class="border-input" type="text" id="poste"  required></div>
+                <div class="w-100 input-group mb-2" id="div_mot_passe"><label class="fw-bold" for="mot_passe" style="width: 130px;">Mot de passe</label><input class="border-input" type="password" id="mot_passe"  required></div>
+                <div class="w-100 input-group mb-2" id="div_confirme_mot_passe"><label class="fw-bold" for="confirme_mot_passe" style="width: 130px;">Confirmer</label><input class="border-input"  type="password" id="confirme_mot_passe" placeholder="Nom de l'utilisateur" required></div>
+                <hr>
+                <button type="button" class="btn btn-outline-success p-1 w-100" style="border-radius: 0;" id="btn-user-save">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-8 p-2">
+        <h6 class="fw-light  p-1 alert-secondary"><img class="me-2" src="assets/icons/users.png" alt="Utilisateurs">ECBI Users</h6>
+        <div class="p-2" id="users_data"></div>
+    </div>
+</div>
+
+<!-- Modal Mdp-->
+<div class="modal fade" id="modal_mdp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pdtLabel" aria-hidden="true">
+    <div class="modal-dialog" style="border-radius: 0;font-size: 14px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fs-5" id="pdtLabel"><i class="fa fa-key"></i> Changer le mot de passe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <div class="w-100 input-group mb-2" id="div_mot_passe"><label class="fw-bold" for="ancien_mot_passe" style="width: 250px;">Ancien Mot de passe</label><input class="border-input" type="password" id="ancien_mot_passe"  required></div>
+                <div class="w-100 input-group mb-2" id="div_mot_passe"><label class="fw-bold" for="nouveau_mot_passe" style="width: 250px;">Nouveau Mot de passe</label><input class="border-input" type="password" id="nouveau_mot_passe"  required></div>
+                <div class="w-100 input-group mb-2" id="div_confirme_mot_passe"><label class="fw-bold" for="confirme_nouveau_mot_passe" style="width: 250px;">Confirmer Nouveau Mot de passe</label><input class="border-input"  type="password" id="confirme_nouveau_mot_passe" required></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler-mdp" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-change-mdp" class="btn btn-primary">Modifier le mot de passe</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/users.js') }}"></script>
+<script>
+    getUsers(1, document.getElementById("users_data"))
+    getServiceEcbis(2, serviceEcbi)
+
+
+    /*
+    EVENTS
+    */
+
+    $("body").on('click','#ajt-user', function (){
+        id_user = 0;
+        $("#userLabel").html('<img class="me-2" src="assets/icons/user.png" alt="clients"> Nouvel utilisateur')
+        resetForm(formUsers)
+        div_mot_passe.style = "display:inline"
+        div_confirme_mot_passe.style = "display:inline"
+        nom.focus()
+    })
+
+    $("body").on('click','.tr_user', function (){
+        id_user = this.id;
+        resetForm(formUsers)
+        $("#userLabel").html('<img class="me-2" src="assets/icons/users.png" alt="Utilisateurs"> ...')
+        getSingleUser(id_user)
+            .then(user => {
+
+                $("#userLabel").html('<img class="me-2" src="assets/icons/users.png" alt="Utilisateurs"><span class="text-success fw-bold">'+ user.nom_prenoms + '</span>')
+                nom.value = user.nom;
+                prenoms.value = user.prenoms;
+                email_user.value = user.email_user;
+                mobile_user.value = user.mobile;
+                serviceEcbi.value = user.service;
+                poste.value = user.poste;
+                titre.value = user.titre;
+                div_mot_passe.style = "display:none"
+                div_confirme_mot_passe.style = "display:none"
+            })
+            .catch(err => {
+                console.error("Erreur :", err);
+            });
+    })
+
+    $("#btn-user-save").on("click", function (){
+        let formData = new FormData()
+
+        formData.append("id_user", id_user)
+        formData.append("nom", nom.value)
+        formData.append("prenoms", prenoms.value)
+        formData.append("email", email_user.value)
+        formData.append("mobile_user", mobile_user.value)
+        formData.append("poste", poste.value)
+        formData.append("serviceEcbi", serviceEcbi.value)
+        formData.append("mot_passe", mot_passe.value)
+        formData.append("confirme_mot_passe", confirme_mot_passe.value)
+        formData.append("titre", titre.value)
+
+        saveUser(formData, 1, document.getElementById("users_data"))
+    })
+
+
+    $("#btn-change-mdp").on("click", function (){
+        let ancien_mdp = document.getElementById("ancien_mot_passe");
+        let nouveau_mdp = document.getElementById("nouveau_mot_passe");
+        let confirme_nouveau_mdp = document.getElementById("confirme_nouveau_mot_passe");
+
+        if (!ancien_mdp || !nouveau_mdp || !confirme_nouveau_mdp) {
+            render_toast_value("Merci de renseigner correctement les valeurs demandées !", 2)
+        } else {
+            let formData = new FormData()
+
+            formData.append("id_user", id_user)
+            formData.append("ancien", ancien_mdp.value)
+            formData.append("nouveau", nouveau_mdp.value)
+            formData.append("confirme", confirme_nouveau_mdp.value)
+
+            changeMdp(formData)
+        }
+
+    })
+
+</script>

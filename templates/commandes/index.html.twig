@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ECBI | Commandes Clients{% endblock %}
+{% block page_titre %}📦 Commandes Clients{% endblock %}
+
+{% block body %}
+    <style>
+        .drop-zone {
+            border: 2px dashed #0078d7;
+            border-radius: 10px;
+            padding: 80px;
+            text-align: center;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .drop-zone.dragover {
+            background: #e6f0ff;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0;
+            padding: 1px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #eeefef;
+            font-size: 12px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-preview {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+        }
+
+    </style>
+
+    <div class="container encadrement mt-1 mx-auto bg-light p-2" id="divCommandes" style="border-top: 4px solid #ebbb01">
+        <p class="loading-text text-center">Chargement des données…</p>
+    </div>
+
+    <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/client.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/commande.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/proforma.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+
+
+    <script>
+        let clientCommandes = []
+        let numero_commande = "{{ numero_commande }}"
+
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                loadCommandesInterface(document.getElementById("divCommandes"))
+            }, 1000);
+        });
+
+        $("body").on('change', '#client', function(){
+            let div_infos_client = document.getElementById("div_infos_client")
+            if (this.value === "0"){
+                div_infos_client.innerHTML = ""
+            } else {
+                getProformasByClient(this.value, document.getElementById("proforma"))
+                getSingleClient(this.value)
+                    .then(client => {
+
+                        div_infos_client.innerHTML = `
+                            <fieldset>
+                                <legend class="fw-light h6"><u>Informations</u></legend>
+                                <div class="ps-4" style="max-width:325px; ">
+                                    <span class="fw-bold" style="font-size: 14px;width:100%;">${client.rs} (${client.sigle})</span><br>
+                                    <span class="" style="font-size: 14px;"><img class="me-2" src="{{ asset('assets/icons/adresse.png') }}" alt="adresse" height="16">${client.adresse}</span><br>
+                                    <span class="" style="font-size: 14px;"><img class="me-2" src="{{ asset('assets/icons/mail.png') }}" alt="mail" height="16">${client.email} </span><br>
+                                    <span class="" style="font-size: 14px;"><img class="me-2" src="{{ asset('assets/icons/telephone.png') }}" alt="tel" height="16">${client.tel} </span><br>
+                                    <span class="" style="font-size: 14px;"><img class="me-2" src="{{ asset('assets/icons/phone.png') }}" alt="mobile" height="16">${client.mobile}</span><br>
+                                </div>
+                            </fieldset>
+                        `
+                    })
+                    .catch(err => {
+                        console.error("Erreur :", err);
+                    });
+            }
+
+        } )
+        $("body").on('change', '#proforma', function(){
+            let div_infos_proforma = document.getElementById("div_proforma")
+            if (this.value === "0"){
+                div_infos_proforma.innerHTML = ""
+            } else {
+                getSingleProforma(this.value)
+                    .then(proforma => {
+                        div_infos_proforma.innerHTML = `
+                            <fieldset class="bg-white mb-2">
+                                <legend class="fw-light h6"><u>Proforma</u></legend>
+                                <div class="row">
+                                    <div class="ps-4 col-5" style="">
+                                        <label style="width:125px;color:darkred;"><span class="badge bg-secondary border border-1 border-white fw-bold">${proforma.statut}</span></label><br>
+                                        <label style="width:125px;">N° Proforma</label>:<span class="fw-bold">${proforma.numero_proforma}</span><br>
+                                        <label style="width:125px;">Date</label>:<span class="fw-bold">${proforma.date_proforma}</span><br>
+                                        <label style="width:125px;">Commercial</label>:<span class="fw-bold">${proforma.user} </span><br>
+                                        <label style="width:125px;">Conditions</label>:<span class="fw-bold">${proforma.conditions}</span><br>
+                                        <label style="width:125px;">validite</label>:<span class="fw-bold text-danger">1 mois</span>
+                                    </div>
+                                    <div class="col-7">
+                                        <table class="table table-hover" style="border: 1px solid #e5e5e5;width: 95%;">
+                                               <thead>
+                                                   <tr>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Désignation</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">PU</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Qte</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Total</th>
+                                                    </tr>
+                                               </thead>
+                                               <tbody class="proforma_tbody">
+                                               </tbody>
+                                        </table>
+                                        <hr>
+                                        <div class="" style="display: flex;justify-content: flex-end;">
+                                            <div id="div_montant" style="float: right;margin-right: 20px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        `
+                        let contenu = "";
+                        for(var i=0; i < proforma.data.length;i++){
+                            contenu +='<tr style="font-size: 13px;">'
+                            contenu +='<td>'+ proforma.data[i].libelle_produit+ '</td>'
+                            contenu +='<td>'+ proforma.data[i].pu+ '</td>'
+                            contenu +='<td>'+ proforma.data[i].qte+ '</td>'
+                            contenu +='<td>'+ proforma.data[i].net+ '</td>'
+                            contenu +='</tr>'
+                        }
+                        contenu +='</tbody></table>'
+                        contenu +='</tbody></table>'
+                        document.querySelector(".proforma_tbody").innerHTML = contenu;
+
+                        contenu ='<label style="width:125px;">Montant HT</label>:<span class="fw-bold ms-1" style="font-size: 14px;">'+ numStr(proforma.total_ht, " ")+ ' F CFA</span><br>'
+                        contenu +='<label style="width:125px;">TVA</label>:<span class="fw-bold ms-1" style="font-size: 14px;">'+ numStr(proforma.tva, " ")+ ' F CFA</span><br>'
+                        contenu +='<label style="width:125px;">Remise</label>:<span class="fw-bold ms-1" style="font-size: 14px;">'+ numStr(proforma.remise, " ")+ ' F CFA</span><br>'
+                        contenu +='<label style="width:125px;">Montant TTC</label>:<span class="badge bg-danger text-white fw-bold" style="font-size: 14px;">'+ numStr(proforma.total_ttc, " ")+ ' F CFA</span>'
+                        document.querySelector("#div_montant").innerHTML = contenu;
+
+                    })
+                    .catch(err => {
+                        console.error("Erreur :", err);
+                    });
+            }
+
+        } )
+    </script>
+{% endblock %}

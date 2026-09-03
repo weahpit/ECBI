@@ -1,0 +1,73 @@
+<style>
+
+    .elegant-list {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .elegant-list li {
+        list-style: none;
+        background: #fff;
+        margin: 12px 0;
+        padding: 16px 20px;
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .elegant-list li input {
+        margin-left: auto; /* pousse l'input à droite */
+        border: 1px solid #7c6302;
+        width: 400px;
+        padding: 5px 8px;
+        border-radius: 6px;
+    }
+
+    .elegant-list li:hover {
+        transform: translateX(8px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .elegant-list li::before {
+        content: "✓";
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(135deg, #f9deba, #e5b503);
+        color: #0457d8;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+</style>
+<div class="p-2 m-1">
+        <div class="p-1">
+            <div class="div_notifications m-2 p-1" style="min-height: 200px;max-height: 700px;overflow-y: scroll;border: 1px solid lightgrey;">
+                <label for="type_document" class="fw-bold">Type Document</label>
+                <select class="ms-2" name="type_document" id="type_document" style="width: 400px;">
+                </select>
+                <div class="mt-2 p-1" id="div_users" style="border: 1px solid lightgray;min-height: 200px;background: radial-gradient(#f2f2ee,#f9f3ed);border-top: 2px solid #555555;">
+
+                </div>
+            </div>
+    </div>
+</div>
+<script src="{{ asset('assets/js/ecbi/api/notifications.js') }}"></script>
+<script>
+    let type_doc = document.querySelector("#type_document");
+
+    getDocumentsNotifications(2, type_doc)
+    type_doc.addEventListener('change', ()=>{
+        getUsersByNotification(type_doc.value, 1, document.querySelector("#div_users"))
+    })
+
+    $("body").on('click', '#btn_proforma_add_user', function (){
+        SaveUserInListAlertesDoc(document.getElementById("select_users").value, type_doc.value)
+    })
+</script>

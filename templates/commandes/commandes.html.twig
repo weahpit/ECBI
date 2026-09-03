@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ECBI | Commandes Clients{% endblock %}
+{% block page_titre %}📦 Commandes Clients{% endblock %}
+
+{% block body %}
+    <style>
+        .pagination button {
+            margin: 2px;
+            padding: 5px 10px;
+        }
+        .pagination .active {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+
+    <div class="container encadrement mt-1 mx-auto bg-light p-2" id="divCommandes" style="border-top: 4px solid #ebbb01">
+        <p class="loading-text text-center">Chargement des données…</p>
+    </div>
+
+    <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+    <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/client.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/commande.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/commandesList.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/proforma.js') }}"></script>
+
+
+    <script>
+        let clientCommandes = []
+
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                loadListeCommandesInterface(document.getElementById("divCommandes"))
+            }, 1000);
+        });
+
+
+    </script>
+{% endblock %}

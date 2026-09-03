@@ -1,0 +1,336 @@
+<style>
+    .w-60 {
+        width: 60%;
+    }
+    .w-30 {
+        width: 30%;
+    }
+    .w-35 {
+        width: 35%;
+    }
+    .w-45 {
+        width: 45%;
+    }
+    input{
+        border: #fdd637 1px solid;
+        transition: background-color 0.5s ease;
+    }
+    /* Transition douce sur la couleur de fond */
+    .check-input {
+        transition: background-color 0.5s ease;
+    }
+
+    /* Quand le champ est valide (rempli) */
+    .check-input:valid {
+        background-color: #ccffcc; /* vert clair adorable */
+    }
+</style>
+<div class="" style="/*background: linear-gradient(#fdfcf9,#fefbf3)*/">
+    <div class="m-1 border border-1 border-light text-center">
+        <select name="criteres" id="criteres" STYLE="border: 1px solid #f7f3f2;background: linear-gradient(#bbf5e6, #afe4d7);">
+            <option value="0">SELECTIONNEZ SVP UN CRITERE</option>
+            <option value="CLIENTS">CLIENTS</option>
+            <option value="TYPES_CLIENT">TYPES CLIENTS</option>
+            <option value="PRODUITS">PRODUITS</option>
+            <option value="TYPES_REGLEMENT">TYPES REGLEMENTS</option>
+            <option value="QUALITES_PRODUITS">QUALITES PRODUITS</option>
+            <option value="GRILLES">GRILLES TARIFAIRES</option>
+            <option value="TYPES_REGLEMENT">TYPES REGLEMENTS</option>
+            <option value="SERVICES_ECBI">SERVICES ECBI</option>
+            <option disabled>──────────</option> <!-- Divider -->
+            <option value="PAYS">PAYS ET VILLES</option>
+        </select>
+    </div>
+    <div class="contenu_references p-2 m-1" style="min-height: 200px;max-height: 700px;overflow-y: scroll;border: 1px solid lightgrey;">
+        <div class="text-center"><img class="mx-auto mt-4" src="{{ asset('assets/images/reference.png') }}" alt="references"></div>
+    </div>
+</div>
+<!-- Modal Clt-->
+<div class="modal fade" id="modal_ajt_clt" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cltLabel" aria-hidden="true">
+    <div class="modal-dialog" style="border-radius: 0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="cltLabel"><img class="me-2" src="{{ asset('assets/icons/client_32.png') }}" alt="clients"> Nouveau client</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <form id="formClt">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Code Client</span>
+                        <input type="text" class="form-control fw-bold fs-5" id="code_client" aria-label="Code du client" aria-describedby="code_client" disabled>
+                    </div>
+                    <div class="row">
+                        <div class="input-group input-group-sm mb-3 w-60 col-md-9">
+                            <span class="input-group-text fw-bold">Raison Sociale<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <input type="text" class="form-control" id="rs_client" required aria-label="Code du client" aria-describedby="rs_client" style="text-transform: uppercase;">
+                        </div>
+                        <div class="input-group input-group-sm mb-3 w-35 col-md-2">
+                            <span class="input-group-text fw-bold">Sigle<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <input type="text" class="form-control" id="sigle" required aria-label="Code du client" aria-describedby="code_client" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Type Client<span class="ms-2 text-danger fw-bold">*</span></span>
+                        <select  class="W-100" id="type_client" aria-label="type de client" required aria-describedby="type_client" style="width: 75%;">
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="input-group input-group-sm mb-3 col-md-6 w-60">
+                            <span class="input-group-text fw-bold">Compte contribuable</span>
+                            <input type="text" class="form-control" id="cc" aria-label="Code du client" aria-describedby="cc" style="text-transform: uppercase;">
+                        </div>
+                        <div class="input-group input-group-sm mb-3 col-md-6 w-35">
+                            <span class="input-group-text fw-bold">RCCIM</span>
+                            <input type="text" class="form-control" id="rccim" aria-label="RCCIM Client" aria-describedby="rccim" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Email<span class="ms-2 text-danger fw-bold">*</span></span>
+                        <input type="text" class="form-control" id="email" aria-label="Code du client" aria-describedby="email" required>
+                    </div>
+                    <div class="row">
+                        <div class="input-group input-group-sm mb-3 col-md-5">
+                            <span class="input-group-text fw-bold">Pays<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <select  class="W-100" id="pays" aria-label="type de client" required aria-describedby="pays" style="">
+                            </select>
+                        </div>
+                        <div class="input-group input-group-sm mb-3 col-md-5" >
+                            <span class="input-group-text fw-bold">Ville</span>
+                            <select  class="W-100" id="ville" aria-label="type de client"  aria-describedby="pays" style="">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Boîte Postale</span>
+                        <input type="text" class="form-control" id="bp" aria-label="Boîte Postale" aria-describedby="bp">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Adresse</span>
+                        <input type="text" class="form-control" id="adresse" aria-label="Adresse client" aria-describedby="adresse">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Personne ressource<span class="ms-2 text-danger fw-bold">*</span></span>
+                        <input type="text" class="form-control" required id="personne_ressource" aria-label="personne ressource" aria-describedby="personne_ressource" style="text-transform: uppercase;">
+                    </div>
+                    <div class="row">
+                        <div class="input-group input-group-sm mb-3 w-45">
+                            <span class="input-group-text fw-bold">Téléphone</span>
+                            <input type="text" class="form-control" id="tel" aria-label="Code du client" aria-describedby="tel">
+                        </div>
+                        <div class="input-group input-group-sm mb-3 w-45">
+                            <span class="input-group-text fw-bold">Mobile<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <input type="text" class="form-control" id="mobile" required aria-label="Code du client" aria-describedby="mobile">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-enregistrer" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Pdt-->
+<div class="modal fade" id="modal_ajt_pdt" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pdtLabel" aria-hidden="true">
+    <div class="modal-dialog" style="border-radius: 0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="pdtLabel"><img class="me-2" src="{{ asset('assets/icons/produit.png') }}" alt="clients"> Nouveau Produit</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <form id="formPdt">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Code Produit</span>
+                        <input type="text" class="form-control fw-bold fs-5 w-50" id="code_produit" aria-label="Code du produit" aria-describedby="code_produit">
+                    </div>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text fw-bold">Nom du produit<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <input type="text" class="form-control fw-bold" id="libelle_produit" required aria-label="Nom du produit" aria-describedby="libelle_produit" style="text-transform: uppercase;">
+                        </div>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text fw-bold">Qualite</span>
+                            <select class="fw-bold" id="qualite_produit" aria-label="Nom du produit" aria-describedby="qualite_produit"></select>
+                        </div>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text fw-bold">Description<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <textarea cols="30" rows="5" class="form-control" id="description_produit" aria-label="Description du produit" aria-describedby="description_produit"></textarea>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler-pdt" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-enregistrer-pdt" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Qualité Pdt-->
+<div class="modal fade" id="modal_ajt_qpdt" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pdtLabel" aria-hidden="true">
+    <div class="modal-dialog" style="border-radius: 0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="pdtLabel"><img class="me-2" src="{{ asset('assets/icons/produit.png') }}" alt="clients"> Nouvelle Qualité Produit</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <form id="formQPdt">
+                        <div class="input-grup input-group-sm mb-3">
+                            <span class="input-group-text fw-bold">Qualité<span class="ms-2 text-danger fw-bold">*</span></span>
+                            <input type="text" class="form-control fw-bold" id="libelle_qualite_produit" required aria-label="Nom du produit" aria-describedby="libelle_produit" style="text-transform: uppercase;">
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler-qpdt" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-enregistrer-qpdt" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal GrilleTarif-->
+<div class="modal fade" id="modal_grille" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pdtLabel" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="pdtLabel"><img class="me-2" src="{{ asset('assets/icons/grille-tarif.png') }}" alt="clients"> Grilles Tarifaires</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <form id="formPdt">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 style="background-color: #ccffcc;font-weight: bold;">Enregistrer un tarif</h5>
+                            <div class="input-group input-group-sm mb-3">
+                                <select  id="grille_code_produit" aria-label="Code du produit" aria-describedby="code_produit" disabled></select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <select  id="id_grille" aria-label="grille" aria-describedby="grille" disabled>
+                                    <option value="0">Sélectionnez une grille</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <input id="tarif" type="number" placeholder="Tarif">
+                            </div>
+                        </div>
+                        <div class="col-6" style="background: #e7e6e6">
+                            <h5 style="background-color: #ccfbff;font-weight: bold;">Grilles</h5>
+                            <input type="text" class="fw-bold w-100 mb-2" id="grille_produit" required aria-label="Nouvelle grille" aria-describedby="Nouvelle grille" placeholder="Nouvelle grille" style="text-transform: uppercase;">
+
+                            <table class="table-hover" style="">
+                                <thead class="w-100">
+                                    <tr  style="background: linear-gradient(#c6c6c6,#b1abab);width: 100%;">
+                                        <th style="width: 100%;">Libellé</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler-grille" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-enregistrer-grille" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal Services -->
+<div class="modal fade" id="modal_ajt_service" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pdtLabel" aria-hidden="true">
+    <div class="modal-dialog" style="border-radius: 0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="servLabel"><img class="me-2" src="{{ asset('assets/icons/service_direction.png') }}" alt="clients"> Nouveau Service / Direction</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <form id="formServ">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Service / Direction<span class="ms-2 text-danger fw-bold">*</span></span>
+                        <input type="text" class="form-control fw-bold" id="libelle_service" required aria-label="Nom du service" aria-describedby="libelle_service" style="text-transform: uppercase;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler-service" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-enregistrer-service" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Pays-->
+<div class="modal fade" id="modal_ajt_pays" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pdtLabel" aria-hidden="true">
+    <div class="modal-dialog" style="border-radius: 0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="servLabel"><img class="me-2" src="{{ asset('assets/icons/country.png') }}" alt="clients"> Pays et villes</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light" style="border: 1px solid lightgrey;">
+                <form id="formPays">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text fw-bold">Pays<span class="ms-2 text-danger fw-bold">*</span></span>
+                        <input type="text" class="form-control fw-bold" id="libelle_pays" required aria-label="Nom du pays" aria-describedby="libelle_pays" style="text-transform: uppercase;">
+                    </div>
+                    <div class="container mt-2 p-2" id="div_villes" style="border: 1px solid lightgrey;min-height: 200px;background:#e4e4e4;">
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-annuler-pays" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="btn-enregistrer-pays" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{# Scripts #}
+<script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/client.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/produit.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/qualite_produit.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/grille.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/service_ecbi.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/api/pays.js') }}"></script>
+<script>
+    let div_body = document.querySelector('.contenu_references');
+    let criteres = document.querySelector('#criteres');
+
+
+    criteres.value = 0;
+    resetForm(formClt)
+    applyPhoneMask(tel)
+    applyPhoneMask(mobile)
+    applyInputHighlight("input")
+
+    $("#criteres").on('change', function (){
+        if(this.value === "0"){
+            div_body.innerHTML = '<div class="text-center"><img class="mx-auto" src="{{ asset('assets/images/reference.png') }}" alt="references"></div>'
+        } else if (this.value === "CLIENTS"){
+            getClients(1, div_body)
+        }  else if (this.value === "PRODUITS"){
+            getProduits(1, div_body)
+        }  else if (this.value === "QUALITES_PRODUITS"){
+            getQualiteProduits(1, div_body)
+        }  else if (this.value === "GRILLES"){
+            getGrilles(1, div_body)
+        }   else if (this.value === "SERVICES_ECBI"){
+            getServiceEcbis(1, div_body)
+        }    else if (this.value === "PAYS"){
+            getPays(1, div_body)
+        } else {
+            div_body.innerHTML = '<div class="text-center"><img class="mx-auto" src="{{ asset('assets/images/reference.png') }}" alt="references"></div>'
+        }
+    })
+</script>

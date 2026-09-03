@@ -1,0 +1,206 @@
+{% extends 'base.html.twig' %}
+{#{% if (type_doc == 1) %}#}
+{% block title %} ECBI | Validation Proformas {% endblock %}
+{% block page_titre %} Validation Proformas {% endblock %}
+
+{% block body %}
+    <style>
+        .drop-zone {
+            border: 2px dashed #0078d7;
+            border-radius: 10px;
+            padding: 80px;
+            text-align: center;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .drop-zone.dragover {
+            background: #e6f0ff;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0;
+            padding: 1px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #c5c6c5;
+            font-size: 12px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-preview {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="container encadrement mt-1 mx-auto bg-light p-2" id="divDocs" style="border-top: 4px solid #ebbb01">
+        <h5 class="fw-bold nbProforma  mb-0 w-100 p-2 ps-2" style="background: linear-gradient(#f4fdeb,#e6fce6);border-bottom: 2px solid darkgreen;"></h5>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <ul class="elegant-list">
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="m-2 details_proforma p-2" style="border: 1px solid lightgray;max-height: 500px;overflow-y: scroll;background: #d9d8d8;">
+                    <div class="text-center">
+                        <h3 class="text-secondary mt-5">Sélectionnez une proforma dans liste puis la valider</h3>
+                        <img class="mx-auto mt-5 mb-5" src="{{ asset('assets/images/validationProforma.png') }}" alt="validation_proforma">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/proforma.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+
+    <script>
+        let details_proforma = document.querySelector(".details_proforma")
+        getListeNonValidees()
+        function getListeNonValidees(){
+            let contenu_Proformas = ""
+            let ulProformas = document.querySelector(".elegant-list")
+            $.ajax({
+                url : '/getListeNonValidees',
+                type : 'POST',
+                success: function(response){
+                    let listeProformas = JSON.parse(response);
+                    if (listeProformas.code === 1){
+                        for (var i=0; i < listeProformas.data.length ; i++){
+                            contenu_Proformas +='<li class="li_option" id="' + listeProformas.data[i].id + '">'
+                            contenu_Proformas +='<h5 class="fw-bold mb-0">PF N° ' + listeProformas.data[i].ref_Proforma + '</h5><br>'
+                            contenu_Proformas +='<span class="mt-0 text-danger fw-bold" style="font-size: 13px;">' + listeProformas.data[i].client + '</span>'
+                            contenu_Proformas +='</li>'
+                        }
+                        ulProformas.innerHTML = contenu_Proformas;
+                        if (listeProformas.nb > 0){
+                            document.querySelector(".nbProforma").innerHTML ='<span class="text-danger">' + listeProformas.nb + '</span> proforma(s) en attente...';
+                        } else {
+                            document.querySelector(".nbProforma").innerHTML ='<span class="text-danger">Aucune proforma à valider</span>';
+                        }
+
+                    } else {
+                        render_toast_value(listeProformas.msg, listeProformas.code)
+                    }
+                }
+            })
+        }
+
+        $("body").on('click','.li_option', function (){
+            let id_proforma = this.id;
+
+            getSingleProforma(id_proforma)
+                .then(proforma => {
+                    details_proforma.innerHTML = `
+
+                <h3 class="fw-light  w-100 p-1 ps-4" style="background: #c5c6c5;color:black;"><img class="me-2 mb-2" src="{{ asset('assets/icons/validation_proforma.png') }}" alt="validation_doc">Validation  proforma N° <span class="text-dark fw-bold">${proforma.numero_proforma} </span></h3>
+                <div class="d-inline-flex mt-2 text-center" style="margin-left: auto;margin-right: auto;">
+                    <button class="btn-danger fw-light btn_reject_proforma" style="border-radius:0;border:0; background:#B0413E;color: white;padding-left:15px;padding-right:15px;padding-top:6px;padding-bottom:6px;" id="${proforma.id}" type="button">Rejeter</button>
+                    <button class="btn-primary fw-light ms-2 btn_accept_proforma" style="border-radius:0;border:0; background:#3e6cb0;color: white;padding-left:15px;padding-right:15px;padding-top:6px;padding-bottom:6px;" id="${proforma.id}"  type="button">Accepter</button>
+                </div>
+                <hr>
+                <div>
+                <fieldset class="bg-white mb-2">
+                                <legend class="fw-light h6"><u>Proforma</u></legend>
+                                <div class="row">
+                                    <div class="ps-4 col-5" style="font-size:13px;">
+                                        <h6 class="mb-1 w-100" style="width:125px;color:darkred;"><span class="badge bg-warning text-dark border border-1 border-white fw-bold"> ${proforma.rs_client}</span></h6>
+                                        <h4 class="mb-1"  style="width:125px;color:darkred;"><span class="fw-bold">${proforma.numero_proforma}</span></h4><br>
+                                        <div class="mt-2 p-2 " style="border:1px solid lightgray;border-top: 2px solid darkgrey;"><label style="width:125px;">N° Commande</label>:<span class="fw-bold text-danger"> ${proforma.numero_proforma}</span><br>
+                                        <label style="width:125px;">Date</label>:<span class="fw-bold"> ${proforma.date_proforma}</span><br>
+                                        <label style="width:125px;">Commercial</label>:<span class="fw-bold"> ${proforma.created_by}</span><br>
+                                        <label style="width:125px;">Conditions</label>:<span class="fw-bold"> ${proforma.conditions}</span><br>
+                                        <label style="width:125px;">Validité</label>:<span class="fw-bold"><span class="text-danger">${proforma.duree_validite} jour(s)</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                    <h6 class="fw-bold"><u>Produits</u></h6>
+                                        <table class="table-hover w-100" style="border: 1px solid #e5e5e5;width: 95%;">
+                                               <thead>
+                                                   <tr class="w-100">
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Désignation</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">PU</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Qte</th>
+                                                        <th style="background: linear-gradient(#e0e0e0, #cdcdcd)">Total</th>
+                                                    </tr>
+                                               </thead>
+                                               <tbody class="commande_tbody">
+                                               {#{%for ligne in doc.ligneProformas%}
+                                                    <tr style="font-size: 13px;">
+                                                        <td>   {{ ligne.codeProduit.libelle  }} </td>
+                                                        <td>   {{ ligne.prix  }} </td>
+                                                        <td>   {{ ligne.qte  }} </td>
+                                                        <td>   {{ ligne.total  }}</td>
+                                                    </tr>
+                                               {% endfor %}#}
+                                               </tbody>
+                                        </table>
+                                        <hr>
+                                        <div class="mb-3" style="display: flex;justify-content: flex-end;">
+                                            <div id="div_montant" style="float: right;margin-right: 20px;">
+                                                    <label style="width:125px;">Montant HT</label>:<span class="fw-bold ms-1" style="font-size: 14px;">${proforma.total_ht} F CFA</span><br>
+                                                    <label style="width:125px;">TVA</label>:<span class="fw-bold ms-1" style="font-size: 14px;">${proforma.tva} F CFA</span><br>
+                                                    <label style="width:125px;">Remise</label>:<span class="fw-bold ms-1" style="font-size: 14px;">(${proforma.taux_remise}}%) ${proforma.remise} F CFA</span><br>
+                                                    <label style="width:125px;">Montant TTC</label>:<span class="badge bg-danger text-white fw-bold" style="font-size: 14px;">${proforma.total_ttc} F CFA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                </div>
+                    `
+                    //Inscription des lignes produits
+                    let contenu_pdts = "";
+                    for (var i=0; i < proforma.data.length ; i++){
+                        contenu_pdts +='<tr style="cursor:pointer;">'
+                        contenu_pdts +='<td class="text-center fw-bold text-danger p-0">' + proforma.data[i].libelle_produit + '</td>'
+                        contenu_pdts +='<td class="p-0">' + proforma.data[i].qte + '</td>'
+                        contenu_pdts +='<td class="p-0">' + proforma.data[i].pu + '</td>'
+                        contenu_pdts +='<td class="p-0">' + proforma.data[i].net + '</td>'
+                        contenu_pdts +='</tr>'
+                    }
+                    document.querySelector(".commande_tbody").innerHTML = contenu_pdts;
+                })
+                .catch(err => {
+                    console.error("Erreur :", err);
+                });
+        })
+        $("body").on('click','.btn_accept_proforma',  function (){
+            $.ajax({
+                url : '/acceptProforma/' + this.id,
+                success : function(response){
+                    render_toast_value(response.msg, response.code)
+                    if (response.code === 1){
+                        getListeNonValidees()
+                        details_proforma.innerHTML = `
+                        <div class="text-center">
+                            <h3 class="text-secondary mt-5">Sélectionnez une proforma dans liste puis la valider</h3>
+                            <img class="mx-auto mt-5 mb-5" src="{{ asset('assets/images/validationProforma.png') }}" alt="validation_proforma">
+                        </div>
+                        `
+                    }
+                }
+            })
+        })
+
+    </script>
+{% endblock %}

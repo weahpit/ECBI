@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Connexion</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+            background-image: url("{{ asset('assets/images/gray-beton.jpg') }}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Century Gothic', sans-serif;
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 1px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #555;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .login-box button:hover {
+            background: #333;
+        }
+
+        .login-box a {
+            display: block;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+            text-decoration: none;
+        }
+
+        .login-box a:hover {
+            color: #000;
+        }
+        .logo {
+            width: 100%;
+            margin-bottom: 5px;
+            filter: grayscale(30%) brightness(1.1);
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: translateX(10px);
+        }
+        .badge{
+            border-radius: 0;
+            background: radial-gradient(#fdcd10, #f9aa0e);
+            color: black;
+            font-weight: bold;
+            box-shadow: 4px 4px #f9e2a6;
+        }
+        .input-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .input-group input {
+            width: 75%;
+            padding: 12px 40px 12px 35px; /* espace pour l'icône */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .input-group i.toggle-eye {
+            position: absolute;
+            right: 1px;   /* 👈 assure la position à droite */
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            transition: color 0.3s ease;
+        }
+
+        .input-group i.toggle-eye:hover {
+            color: #f8c146;
+        }
+
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <img src="{{ asset('assets/images/camion-toupie.png') }}" alt="Logo Béton" class="logo">
+    <h1>ECBI <span class="badge mt-0" style="font-size: 16px;">Workflow</span></h1>
+    <form method="post">
+        <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="email" placeholder="Adresse e-mail"  value="{{ last_username }}" name="email" id="inputEmail"  autocomplete="email" required autofocus>
+        </div>
+        <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" name="password" id="inputPassword"  placeholder="Mot de passe"  autocomplete="current-password" required>
+            <i class="fa fa-eye toggle-eye"></i>
+        </div>
+        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+{#
+
+        <div class="checkbox mb-3">
+            <input type="checkbox" name="_remember_me" id="_remember_me">
+            <label for="_remember_me">Se rappeler de moi</label>
+        </div>
+#}
+
+        <button class="btn btn-lg btn-primary" type="submit">
+            je me connecte
+        </button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleEye = document.querySelector('.toggle-eye');
+        const pwdInput = document.getElementById('password');
+
+        toggleEye.addEventListener('click', function() {
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                toggleEye.classList.remove('fa-eye');
+                toggleEye.classList.add('fa-eye-slash');
+            } else {
+                pwdInput.type = 'password';
+                toggleEye.classList.remove('fa-eye-slash');
+                toggleEye.classList.add('fa-eye');
+            }
+        });
+
+        // Notifications sur envoi des credentials
+        {% if error %}
+            render_toast_value("Erreur ! Accès incorects...", 0)
+        {% endif %}
+    });
+
+</script>
+</body>
+</html>
