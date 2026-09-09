@@ -1,5 +1,7 @@
 twig:
     file_name_pattern: '*.twig'
+    globals:
+        options_app: '@App\Services\OptionsService'
 
 when@test:
     twig:

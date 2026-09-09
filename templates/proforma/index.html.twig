@@ -4,104 +4,104 @@
 {% block page_titre %}📦 Proformas{% endblock %}
 
 {% block body %}
-    <style>
-        body{
-            font-size: 13px;
-        }
-        thead > tr{
-            width: 100%;
-            padding: 15px;
-            font-weight: bold;
-            background: linear-gradient(#e4e4e3, #fdf9f1);
-            border-bottom: 2px solid black;
-        }
-       tbody> tr > td{
-            padding: 15px;
-            border-bottom: 1px solid lightgrey;
-        }
-       input {
-           padding: 0;
-           border: 0;
-           border-bottom: 1px solid grey;
-       }
-    </style>
+<style>
+    body{
+        font-size: 13px;
+    }
+    thead > tr{
+        width: 100%;
+        padding: 15px;
+        font-weight: bold;
+        background: linear-gradient(#e4e4e3, #fdf9f1);
+        border-bottom: 2px solid black;
+    }
+    tbody> tr > td{
+        padding: 15px;
+        border-bottom: 1px solid lightgrey;
+    }
+    input {
+        padding: 0;
+        border: 0;
+        border-bottom: 1px solid grey;
+    }
+</style>
     <div class="container encadrement mt-1 mx-auto bg-light p-2" id="divCommandes" style="border-top: 4px solid #ebbb01">
         <form id="formProforma">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="p-1 text-center" style="border-top: 1px solid lightgrey;">
-                    <h5 class="p-2 mb-3 fw-light text-center text-white W-100" style="background-color: rgb(2,118,185);">Mes proformas</h5>
-                </div>
-                <div class="" id="mes_proformas">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="p-1 text-center" style="border-top: 1px solid lightgrey;">
+                        <h5 class="p-2 mb-3 fw-light text-center text-white W-100" style="background-color: rgb(2,118,185);">Mes proformas</h5>
+                    </div>
+                    <div class="" id="mes_proformas">
 
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="p-2 mb-3 bg-white" style="border-top: 1px solid grey;min-height: 500px;">
-                    <h6 class="p-2 mb-3 fw-normal text-center text-white" style="background-color: rgb(1,106,104);">Editer une nouvelle proforma</h6>
-                    <div class="mb-0">
-                        <div class="row">
-                            <div class="mb-3 col-md-12">
-                                <label for="client" class="form-label">Client <span class="text-danger">*</span></label>
-                                <select id="client" required></select>
-                                <select id="grille" required style="max-width: 200px;"></select>
-                                <label for="dateProforma" class="form-label">Date <span class="text-danger">*</span></label>
-                                <input type="date" class="fw-bold text-center ms-2 p-0" id="dateProforma" style="width:150px;padding : 2px;" required disabled>
-                                <label for="dateProforma" class="form-label">Validité (Jours) <span class="text-danger">*</span></label>
-                                <input type="number" value="{{ validite }}" class="fw-bold text-center ms-2" id="validiteProforma" style="width:75px;padding : 2px;background: #fcf1d5;" required>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="p-2 m-2 bg-light" style="border: 1px solid lightgrey;min-height: 300px;max-height: 500px;">
-                            <div class="text-center p-1"><button id="btnAddRow" type="button" class="btn btn-warning" disabled>➕ Ajouter un produit</button></div>
-                                <table class="w-100 table table-responsive" id="tblProforma">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" style="width: 5%">N°</th>
-                                            <th style="width: 35%">Produit</th>
-                                            <th class="text-center" style="width: 15%">Quantité</th>
-                                            <th class="text-center" style="width: 15%">Prix Unitaire</th>
-                                            <th class="text-center" style="width: 15%">Prix Total</th>
-                                            <th class="text-center" style="width: 15%"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                <div class="col-md-8">
+                    <div class="p-2 mb-3 bg-white" style="border-top: 1px solid grey;min-height: 500px;">
+                        <h6 class="p-2 mb-3 fw-normal text-center text-white" style="background-color: rgb(1,106,104);">Editer une nouvelle proforma</h6>
+                        <div class="mb-0">
                             <div class="row">
-                                <div class="col-md-7">
-                                    <h5 class="mt-5" style="bottom: 10px" id="en_lettre"></h5>
+                                <div class="mb-3 col-md-12">
+                                    <label for="client" class="form-label">Client <span class="text-danger">*</span></label>
+                                    <select id="client" required></select>
+                                    <select id="grille" required style="max-width: 200px;"></select>
+                                    <label for="dateProforma" class="form-label">Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="fw-bold text-center ms-2 p-0" id="dateProforma" style="width:150px;padding : 2px;" required disabled>
+                                    <label for="dateProforma" class="form-label">Validité (Jours) <span class="text-danger">*</span></label>
+                                    <input type="number" value="{{ validite }}" class="fw-bold text-center ms-2" id="validiteProforma" style="width:75px;padding : 2px;background: #fcf1d5;" required>
                                 </div>
+                            </div>
+                            <hr>
+                            <div class="p-2 m-2 bg-light" style="border: 1px solid lightgrey;min-height: 300px;max-height: 500px;">
+                                <div class="text-center p-1"><button id="btnAddRow" type="button" class="btn btn-warning" disabled>➕ Ajouter un produit</button></div>
+                                <table class="w-100 table table-responsive" id="tblProforma">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="text-center" style="width: 5%">N°</th>
+                                                            <th style="width: 35%">Produit</th>
+                                                            <th class="text-center" style="width: 15%">Quantité</th>
+                                                            <th class="text-center" style="width: 15%">Prix Unitaire</th>
+                                                            <th class="text-center" style="width: 15%">Prix Total</th>
+                                                            <th class="text-center" style="width: 15%"></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <h5 class="mt-5" style="bottom: 10px" id="en_lettre"></h5>
+                                    </div>
 
-                                <div class="col-md-5">
-                                    <div class="mt-2 p-2" style="border: 1px solid lightgrey;">
-                                        <div class="input-group">
-                                            <label class="fw-bold" for="Total" style="width: 120px;">Total HT</label>
-                                            <input type="number" id="total_ht" class="fw-bold" readonly style="width: 150px;text-align: right;">
-                                        </div>
-                                        <div class="input-group mt-1">
-                                            <label class="fw-bold" for="remise" style="width: 120px;">Remise (%)</label>
-                                            <select id="taux_remise" class="fw-bold text-center"  style="min-width: 20px;background: #fcf1d5;"></select>
-                                            <input type="number" id="remise" class="fw-bold" readonly value="0" style="width: 110px;text-align: right;">
-                                        </div>
-                                        <hr>
-                                        <div class="input-group">
-                                            <label class="fw-bold" for="tva" style="width: 120px;">TVA ({{ tva }}%)</label>
-                                            <input type="number" id="tva" class="fw-bold" readonly style="width: 150px;text-align: right;">
-                                        </div>
-                                        <div class="input-group">
-                                            <label class="fw-bold" for="total_ttc" style="width: 120px;">Total TTC</label>
-                                            <input type="number" id="total_ttc" class="fw-bold" readonly style="width: 150px;text-align: right;">
+                                    <div class="col-md-5">
+                                        <div class="mt-2 p-2" style="border: 1px solid lightgrey;">
+                                            <div class="input-group">
+                                                <label class="fw-bold" for="Total" style="width: 120px;">Total HT</label>
+                                                <input type="number" id="total_ht" class="fw-bold" readonly style="width: 150px;text-align: right;">
+                                            </div>
+                                            <div class="input-group mt-1">
+                                                <label class="fw-bold" for="remise" style="width: 120px;">Remise (%)</label>
+                                                <select id="taux_remise" class="fw-bold text-center"  style="min-width: 20px;background: #fcf1d5;"></select>
+                                                <input type="number" id="remise" class="fw-bold" readonly value="0" style="width: 110px;text-align: right;">
+                                            </div>
+                                            <hr>
+                                            <div class="input-group">
+                                                <label class="fw-bold" for="tva" style="width: 120px;">TVA ({{ tva }}%)</label>
+                                                <input type="number" id="tva" class="fw-bold" readonly style="width: 150px;text-align: right;">
+                                            </div>
+                                            <div class="input-group">
+                                                <label class="fw-bold" for="total_ttc" style="width: 120px;">Total TTC</label>
+                                                <input type="number" id="total_ttc" class="fw-bold" readonly style="width: 150px;text-align: right;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <button class="btn btn-success mt-2" id="soumettre_proforma" type="button" style="float: right;">Soumettre</button>
                         </div>
-                        <button class="btn btn-success mt-2" id="soumettre_proforma" type="button" style="float: right;">Soumettre</button>
                     </div>
                 </div>
             </div>
-        </div>
         </form>
     </div>
 
@@ -163,56 +163,56 @@
         getGrilles(2,document.getElementById("grille"))
         getProformas(1,document.getElementById("mes_proformas"))
 
+                            document.getElementById("btnAddRow").addEventListener("click", function() {
+                                const tableBody = document.querySelector("#tblProforma tbody");
 
-        document.getElementById("btnAddRow").addEventListener("click", function() {
-            const tableBody = document.querySelector("#tblProforma tbody");
+                                // Créer une nouvelle ligne
+                                const row = document.createElement("tr");
 
-            // Créer une nouvelle ligne
-            const row = document.createElement("tr");
-
-            row.innerHTML = `
+                                row.innerHTML = `
 <td><input class="text-center fw-bold" id="row_number" type="text"  style="width: 50px;padding: 0;" readonly></td>
-                            <td ><select class="produit" style="width: 200px;"></select></td>
-                            <td><input style="width:  75px;background: #fcf1d5;" type="number" class="qty text-center fw-bold" value="0"></td>
-                            <td><input style="width:  100px;padding: 0;" type="number" readonly class="prixUnitaire text-center fw-bold" value="0"></td>
-                            <td><input style="width:  150px;padding: 0;" type="number" readonly class="total text-center fw-bold" value="0"></td>
-                            <td><button class="btn btn-danger text-white btn-sm removeRow">🗑️</button></td>
-                          `;
+                                <td ><select class="produit" style="width: 200px;"></select></td>
+                                <td><input style="width:  75px;background: #fcf1d5;" type="number" class="qty text-center fw-bold" value="0"></td>
+                                <td><input style="width:  100px;padding: 0;" type="number" readonly class="prixUnitaire text-center fw-bold" value="0"></td>
+                                <td><input style="width:  150px;padding: 0;" type="number" readonly class="total text-center fw-bold" value="0"></td>
+                                <td><button class="btn btn-danger text-white btn-sm removeRow">🗑️</button></td>
+                            `;
 
-            tableBody.appendChild(row);
+                            tableBody.appendChild(row);
 
-            // recalculer le total quand quantité ou prix changent
-<<<<<<< HEAD
-    row.querySelector("#row_number").value = row.rowIndex
+                            // recalculer le total quand quantité ou prix changent
+                                row.querySelector("#row_number").value = row.rowIndex
 
-            row.addEventListener("keypress", (e)=>{
+                                row.addEventListener("keypress", (e)=>{
 
-                if (e.key === "Enter"){
-                    e.preventDefault()
-                    document.getElementById("btnAddRow").click()
-                    row.querySelector(".produit").focus()
-                }
-            });
+                                    if (e.key === "Enter"){
+                                        e.preventDefault()
+                                        document.getElementById("btnAddRow").click()
+                                        row.querySelector(".produit").focus()
+                                    }
+                                });
 
-            row.querySelector(".qty").addEventListener("input", updateRowTotal);
-            row.querySelector(".produit").addEventListener("change", updateRowTotal);
-            row.querySelector(".prixUnitaire").addEventListener("input", updateRowTotal);
-            row.querySelector(".produit").addEventListener("load", getOnlyProduitsFromGrille(document.getElementById("grille").value,  row.querySelector(".produit")));
+                                row.querySelector(".qty").addEventListener("input", updateRowTotal);
+                                row.querySelector(".produit").addEventListener("change", updateRowTotal);
+                                row.querySelector(".prixUnitaire").addEventListener("input", updateRowTotal);
+                                row.querySelector(".produit").addEventListener("load", getOnlyProduitsFromGrille(document.getElementById("grille").value,  row.querySelector(".produit")));
 
-            // supprimer la ligne
-            row.querySelector(".removeRow").addEventListener("click", function() {
-                row.remove();
-            });
 
-            setTimeout(function (){
-                $(".produit").on("change", function (){
-                    getTarif(row.querySelector(".produit"), document.getElementById("grille").value,  row.querySelector(".prixUnitaire"))
-                    $(".qty").focus()
-                    $(".qty").select()
-                    /*setInputsValue()*/
-                });
-            }, 500)
-        });
+
+                                // supprimer la ligne
+                            row.querySelector(".removeRow").addEventListener("click", function() {
+                                row.remove();
+                            });
+
+                                setTimeout(function (){
+                                    $(".produit").on("change", function (){
+                                        getTarif(row.querySelector(".produit"), document.getElementById("grille").value,  row.querySelector(".prixUnitaire"))
+                                        $(".qty").focus()
+                                        $(".qty").select()
+                                        /*setInputsValue()*/
+                                    });
+                                }, 500)
+                            });
 
 
 
@@ -279,16 +279,15 @@
             $('#total_ttc').val(net_commercial + parseFloat($('#tva').val()));
             ToutEnLettres()
         }
+                            function updateRowTotal(e) {
+                                const row = e.target.closest("tr");
+                                const qty = parseFloat(row.querySelector(".qty").value) || 0;
 
-        function updateRowTotal(e) {
-            const row = e.target.closest("tr");
-            const qty = parseFloat(row.querySelector(".qty").value) || 0;
-
-            const price = parseFloat(row.querySelector(".prixUnitaire").value) || 0;
-            const total = qty * price;
-            row.querySelector(".total").value = (total.toFixed(0)).toLocaleString();
-            calcul_montants()
-        }
+                                const price = parseFloat(row.querySelector(".prixUnitaire").value) || 0;
+                                const total = qty * price;
+                                row.querySelector(".total").value = (total.toFixed(0)).toLocaleString();
+                                calcul_montants()
+                            }
         function reinitialise(){
             resetForm(formProforma)
             $("#validiteProforma").val({{ validite }})
@@ -301,5 +300,5 @@
         }
 
         /*  FIN EVENTS */
-    </script>
-{% endblock %}
+                        </script>
+                        {% endblock %}

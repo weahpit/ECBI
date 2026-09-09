@@ -25,7 +25,7 @@ final class CLientController extends AbstractController
     public function index(): Response
     {
 
-        return $this->render('client/no_granted.html.twig');
+        return $this->render('client/index.html.twig');
     }
 
     #[Route('/getClients', name: 'get_clients')]

@@ -1,3 +1,4 @@
+{% set optionsApp = options_app %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,10 +14,13 @@
             justify-content: center;
             align-items: center;
             background-color: #f4f4f4;
-            background-image: url("{{ asset('assets/images/gray-beton.jpg') }}");
+        {% if(optionsApp.getCustomize.fondApplication) %}
+            background-image: url("docs/modeles/{{ optionsApp.getCustomize.fondApplication }}");
+        {% endif %}
             background-repeat: no-repeat;
             background-size: cover;
-            font-family: 'Century Gothic', sans-serif;
+
+            font-family: {{ optionsApp.getCustomize.police|raw }};
         }
 
         .login-box {
@@ -124,8 +128,8 @@
 </head>
 <body>
 <div class="login-box">
-    <img src="{{ asset('assets/images/camion-toupie.png') }}" alt="Logo Béton" class="logo">
-    <h1>ECBI <span class="badge mt-0" style="font-size: 16px;">Workflow</span></h1>
+    <img src="docs/modeles/{{ optionsApp.getCustomize.logoLogin }}" alt="Logo Béton" class="logo">
+    <h3>{{ optionsApp.getCustomize.prefixApplication }} <hr style="color: lightgrey;"><span class="badge mt-0" style="font-size: 16px;">Workflow</span></h3>
     <form method="post">
         <div class="input-group">
             <i class="fa fa-user"></i>

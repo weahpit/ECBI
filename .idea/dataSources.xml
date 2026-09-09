@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="bd_ecbi@localhost" uuid="8aa515d9-39ee-4b77-9d2c-63fc1e86e363">
+    <data-source source="LOCAL" name="bd_ecbi2@localhost" uuid="8aa515d9-39ee-4b77-9d2c-63fc1e86e363">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/bd_ecbi</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bd_ecbi2</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="bd_ecbi2@localhost [2]" uuid="091a5504-9d69-4581-a22d-df34cae7dca9">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bd_ecbi2</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

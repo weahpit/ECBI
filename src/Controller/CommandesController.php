@@ -26,7 +26,7 @@ final class CommandesController extends AbstractController
     #[Route('/NewOrder', name: 'app_commandes')]
     public function index(): Response
     {
-        return $this->render('commandes/no_granted.html.twig', [
+        return $this->render('commandes/index.html.twig', [
             'numero_commande' => $this->outils->generateNumeroCommande(),
         ]);
     }

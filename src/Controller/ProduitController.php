@@ -24,7 +24,7 @@ final class ProduitController extends AbstractController
     public function index(): Response
     {
 
-        return $this->render('produit/no_granted.html.twig');
+        return $this->render('produit/index.html.twig');
     }
 
     #[Route('/getProduits', name: 'get_produits')]

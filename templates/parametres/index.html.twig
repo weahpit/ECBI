@@ -72,7 +72,7 @@
             </button>
             <button class="list-group-item list-group-item-action"
                     data-bs-toggle="tab" data-bs-target="#tabGroupes">
-                <i class="fa-solid fa-users-gear"></i> Groupes et Permissions
+                <i class="fa-solid fa-users-gear"></i> Groupes et Rôles
             </button>
             <button class="list-group-item list-group-item-action"
                     data-bs-toggle="tab" data-bs-target="#tabNotifications">
@@ -86,6 +86,11 @@
             <button class="list-group-item list-group-item-action"
                     data-bs-toggle="tab" data-bs-target="#tabOptions">
                 <i class="fa-solid fa-toolbox"></i> Options
+            </button>
+
+            <button class="list-group-item list-group-item-action"
+                    data-bs-toggle="tab" data-bs-target="#tabCustomize">
+                <i class="fa-solid fa-gear"></i> Personnaliser
             </button>
         </div>
 
@@ -113,6 +118,10 @@
             <div class="tab-pane fade" id="tabOptions">
                 <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Options de l'application</h2>
                 {% include 'parametres/options.html.twig' %}
+            </div>
+            <div class="tab-pane fade" id="tabCustomize">
+                <h2 class="w-100 fw-bold text-secondary mb-2 ps-5 pb-2" style="background: #dddcdc">Personnalisation de l'application</h2>
+                {% include 'parametres/customize.html.twig' %}
             </div>
         </div>
     </div>

@@ -1,3 +1,4 @@
+{% set optionsApp = options_app %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,129 +10,29 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #f4f4f4;
-            background-image: url("{{ asset('assets/images/gray-beton.jpg') }}");
+        {% if(optionsApp.getCustomize.typeFond == 'Couleur') %}
+            background-color: {{ optionsApp.getCustomize.fondApplication }};
+        {% else %}
+            background-image: url("docs/modeles/{{ optionsApp.getCustomize.fondApplication }}");
+        {% endif %}
             background-repeat: no-repeat;
             background-size: cover;
-            font-family: 'Century Gothic', sans-serif;
-        }
-        .navbar-dark {
-            background: linear-gradient(90deg, #2c2c2c, #444);
-        }
-        .navbar {
-            background: linear-gradient(270deg,
-            #faf8e5,   /* jaune très clair */ #fcefcb,   /* jaune doux */ #fce9cd,   /* orange pastel */ #fcddb0 /* orange clair */
-            );
-            background-size: 600% 600%;
-            animation: gradientShift 15s ease infinite;
-            color: #333;
-            padding: 1rem;
-        }
-
-        /* Animation du dégradé */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            color: #f8c146;
-            font-size: 24px;
-        }
-        .navbar-brand:hover {
-            color: #FFFFFF;
-        }
-        .navbar-nav .nav-link {
-            color: #ddd;
-            margin: 0 8px;
-            transition: color 0.7s ease;
-        }
-        .navbar-nav .nav-link:hover {
-            color: #fff;
-        }
-        .dashboard {
-            padding: 30px;
-        }
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .card-title {
-            font-weight: 600;
-            color: #333;
-        }
-        .icon {
-            font-size: 28px;
-            color: #f8c146;
-            margin-right: 10px;
-        }
-        select{
-            border: 1px solid lightgrey;
-            background: linear-gradient(#f3f3f3,#cccbcb);
-            min-width: 100px;
-        }
-        select option{
-            background-color: #fff9c4; /* jaune très clair adorable */
-            color: #333; /* texte foncé pour contraste */
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: none !important;
-            box-shadow: none !important;
-        }
-
-        .loading-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            background: linear-gradient(135deg, #fff9c4, #ffcc80);
-        }
-
-        .loading-text {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-            animation: fadeBlink 1.5s ease-in-out infinite;
-            margin-top: 50px;
-        }
-
-        @keyframes fadeBlink {
-            0% { opacity: 0.2; }
-            50% { opacity: 1; }
-            100% { opacity: 0.2; }
-        }
-
-        fieldset {
-            border: 2px solid #3a2121;   /* couleur de la bordure */
-            border-radius: 4px;
-            padding: 4px;
-            position: relative;
-            margin-top: 25px;
-        }
-
-        legend {
-            font-weight: bold;
-            color: #3a2121;
-            padding: 0 8px;              /* espace autour du texte */
-            position: relative;
-            top: -15px;                  /* remonte la légende */
-            background: #fff;            /* masque la bordure derrière le texte */
-            margin-bottom: 10px;
-            width: 100px;
+            font-family: {{ optionsApp.getCustomize.police|raw }};
         }
     </style>
-
 </head>
 <body>
 {% block menu %}
-<!-- Menu horizontal -->
-    <nav class="navbar-dark navbar-expand-sm">
+    <!-- Menu horizontal -->
+    <nav class="navbar-dark navbar-expand-sm" style="background: {{ optionsApp.getCustomize.barreTitreCouleur }}">
         <div class="container-fluid">
             <a class="navbar-brand h2" href="{{ path('app_tdb') }}" >
-                <i class="fa-solid fa-truck"></i> ECBI Workflow
+                {% if(optionsApp.getCustomize.typeIconeApplication == 'Image') %}
+                    <img height="32px" src="docs/modeles/{{ optionsApp.getCustomize.iconeApplication }}" alt="">
+                {% else %}
+                    {{ optionsApp.getCustomize.iconeApplication }}
+                {% endif %}
+                {{ optionsApp.getCustomize.prefixApplication }}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -148,14 +49,9 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="commandesDropdown">
                             <li><a class="dropdown-item" href="{{ path('app_proforma') }}">➕ Nouvelle Proforma</a></li>
-
-                            <li><a class="dropdown-item" href="{{ path('app_commandes') }}">➕ Nouvelle commande</a></li>
-                            <li><a class="dropdown-item" href="#">📋 Liste des commandes</a></li>
-
                             <li><a class="dropdown-item" href="{{ path('validation_proforma') }}">➕ Validation des proformas</a></li>
                             <li><a class="dropdown-item" href="{{ path('app_commandes') }}">➕ Nouvelle commande</a></li>
                             <li><a class="dropdown-item" href="{{ path('liste_commandes') }}">📋 Liste des commandes</a></li>
-
                         </ul>
                     </li>
                     <!-- Production avec sous-menu -->
@@ -181,15 +77,18 @@
 {% endblock %}
 <!-- Contenu du dashboard -->
 <nav class="navbar navbar-light p-0" style="border-bottom: 2px solid #dbb001;">
-        <h2 class="text-secondary p-1 ps-4 w-75">
+
+    <h2 class="text-secondary p-1 ps-4 w-75">
             {% block page_titre %}
 
             {% endblock %}
         </h2>
         {% if (app.user) %}
+
             <div class="notifs_div" style="width: 40px;">
 
             </div>
+
             <div class="btn-group m-2 d-flex" style="border: 1px solid #c9a202;">
                 <button class="btn btn-sm fw-bold" type="button" style="background-color: #ccffcc">
                     {{ app.user.nom }} {{ app.user.prenoms }}
@@ -198,24 +97,21 @@
                     <span class="visually-hidden">{{ app.user.nom }} {{ app.user.prenoms }}</span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ path('app_logout') }}"> <i class="fa fa-power me-2"></i>Je me déconnecte</a></li>
+                    <li><a class="btn fw-bold" href="{{ path('app_logout') }}"> <i class="fa fa-power-off text-danger me-2 ms-1"></i>déconnection</a></li>
                 </ul>
             </div>
         {% endif %}
 
 </nav>
 <div class="dashboard container-fluid panel" id="panel" style="/*min-height: 50em;*/">
-    {% block body %}
+        {% block body %}
 
-    {% endblock %}
-</div>
+        {% endblock %}
+    </div>
 <div aria-live="polite" aria-atomic="true" class="position-relative">
     <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ asset('assets/js/external/jquery.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
 <script src="{{ asset('assets/js/external/sweetalert/sweetalert.min.js') }}"></script>
@@ -268,7 +164,7 @@
                         }
                         ul_contenu += '</a><hr>'
                     }
-                    document.getElementById("notifList").innerHTML = ul_contenu;
+                    document.querySelector("#notifList").innerHTML = ul_contenu;
                 }
             }
         })
@@ -276,12 +172,12 @@
 
     $("body").on("click", ".a_notif", function (){
         $.ajax({
-                url : 'setLu/' + this.id,
-                type : 'POST',
-                success : function(response){
+            url : 'setLu/' + this.id,
+            type : 'POST',
+            success : function(response){
 
-                }
-         });
+            }
+        });
     });
 
 </script>

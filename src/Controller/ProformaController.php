@@ -2,15 +2,12 @@
 
 namespace App\Controller;
 
-use Knp\Snappy\Pdf;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\ClientEcbi;
 use App\Entity\GrilleTarif;
 use App\Entity\InfosSociete;
 use App\Entity\LigneProforma;
 use App\Entity\OptionsEcbi;
+use App\Entity\Produit;
 use App\Entity\Proforma;
 use App\Entity\ProgrammationAlerte;
 use App\Entity\TarifProduitGrille;
@@ -18,12 +15,20 @@ use App\Entity\Ville;
 use App\Services\NotificationService;
 use App\Services\Outils;
 use Doctrine\Persistence\ManagerRegistry;
+use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use IntlDateFormatter;
+use Knp\Snappy\Pdf;
+use phpDocumentor\Reflection\Types\This;
+use setasign\Fpdi\Fpdi;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function Symfony\Component\Translation\t;
 
 final class ProformaController extends AbstractController
 {
@@ -119,47 +124,47 @@ final class ProformaController extends AbstractController
         return new JsonResponse(json_encode($reponse));
     }
     #[Route('/getProformasByClient/{id_client}', name: 'get_proformas_by_client')]
-        public function get_proformas_by_client(int $id_client): Response
-        {
-            if (!$this->getUser()){return $this->redirectToRoute("app_login");}
-            $reponse = array();
-            try {
-                $client = $this->registry->getRepository(ClientEcbi::class)->find($id_client);
-                $data = array();
-                if ($client){
-                    $proformas = $this->registry->getRepository(Proforma::class)->findBy(['code_client'=>$client]);
-                    foreach ($proformas as $proforma){
-                        $data[] = array(
-                            'id'=>$proforma->getId(),
-                            'ref_Proforma'=>$proforma->getNumeroProforma(),
-                            'dateProforma'=>$proforma->getDateProforma()->format('d/m/Y'),
-                            'client'=>$proforma->getCodeClient()? $proforma->getCodeClient()->getSigle() : "-",
-                            'montant'=>$proforma->getNetAPayer(),
-                            'etat'=>$proforma->isEtat()
-                        );
-                    }
-
-                    $reponse = array(
-                        'code'=>1,
-                        'msg'=>'Success',
-                        'data'=>$data
-                    );
-                } else {
-                    $reponse = array(
-                        'code'=>1,
-                        'msg'=>'Erreur Client !',
-                        'data'=>$data
+    public function get_proformas_by_client(int $id_client): Response
+    {
+        if (!$this->getUser()){return $this->redirectToRoute("app_login");}
+        $reponse = array();
+        try {
+            $client = $this->registry->getRepository(ClientEcbi::class)->find($id_client);
+            $data = array();
+            if ($client){
+                $proformas = $this->registry->getRepository(Proforma::class)->findBy(['code_client'=>$client]);
+                foreach ($proformas as $proforma){
+                    $data[] = array(
+                        'id'=>$proforma->getId(),
+                        'ref_Proforma'=>$proforma->getNumeroProforma(),
+                        'dateProforma'=>$proforma->getDateProforma()->format('d/m/Y'),
+                        'client'=>$proforma->getCodeClient()? $proforma->getCodeClient()->getSigle() : "-",
+                        'montant'=>$proforma->getNetAPayer(),
+                        'etat'=>$proforma->isEtat()
                     );
                 }
 
-            }catch (\Throwable $throwable){
                 $reponse = array(
-                    'code'=>0,
-                    'msg'=>'Erreur !<br>'. $throwable->getMessage()
+                    'code'=>1,
+                    'msg'=>'Success',
+                    'data'=>$data
+                );
+            } else {
+                $reponse = array(
+                    'code'=>1,
+                    'msg'=>'Erreur Client !',
+                    'data'=>$data
                 );
             }
-            return new JsonResponse(json_encode($reponse));
+
+        }catch (\Throwable $throwable){
+            $reponse = array(
+                'code'=>0,
+                'msg'=>'Erreur !<br>'. $throwable->getMessage()
+            );
         }
+        return new JsonResponse(json_encode($reponse));
+    }
 
     #[Route('/saveProforma', name: 'proforma_save')]
     public function proforma_save(Request $request): Response
@@ -395,7 +400,7 @@ final class ProformaController extends AbstractController
 
             $pdf->SetXY(10, 70);
             $pdf->Cell(40, 5, 'Date :');
-                $pdf->Cell(80, 5, mb_convert_encoding(ucfirst($formatter->format($proforma->getDateProforma())), 'ISO-8859-1', 'UTF-8'));
+            $pdf->Cell(80, 5, mb_convert_encoding(ucfirst($formatter->format($proforma->getDateProforma())), 'ISO-8859-1', 'UTF-8'));
 
 // Références
             $pdf->SetXY(10, 75);
