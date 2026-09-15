@@ -33,13 +33,13 @@ final class ServiceEcbiController extends AbstractController
 
             sort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -55,20 +55,20 @@ final class ServiceEcbiController extends AbstractController
 
             if ($service_ecbi){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'libelle'=>$service_ecbi->getLibelle()
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un service_ecbi dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

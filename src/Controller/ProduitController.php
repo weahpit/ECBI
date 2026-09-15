@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\GrilleTarif;
 use App\Entity\Produit;
+use App\Entity\Proforma;
 use App\Entity\TarifProduitGrille;
 use App\Services\Outils;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,13 +45,13 @@ final class ProduitController extends AbstractController
 
             sort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -80,14 +81,48 @@ final class ProduitController extends AbstractController
                 }
 
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
 
             }catch (\Throwable $throwable){
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
+                    'msg'=>'Erreur !<br>'. $throwable->getMessage()
+                );
+            }
+            return new JsonResponse(json_encode($reponse));
+        }
+        #[Route('/getOnlyProduitsFromProforma/{value}', name: 'get_only_produits_from_proforma')]
+        public function get_only_produits_from_proforma(int $value): Response
+        {
+            $reponse = array();
+            try {
+                $proforma = $this->registry->getRepository(Proforma::class)->find($value);
+
+                $data = array();
+                if($proforma){
+                    $lignes = $proforma->getLigneProformas();
+
+                    foreach ($lignes as $ligne){
+                                $data[] = array(
+                                    'id'=>$ligne->getCodeProduit()->getId(),
+                                    'libelle_produit'=>$ligne->getCodeProduit()->getLibelle(),
+                                    'code_produit'=>$ligne->getCodeProduit()->getCodeProduit()
+                                );
+                    }
+                }
+
+                $reponse = array(
+                    'code'=>'success',
+                    'msg'=>'Success',
+                    'data'=>$data
+                );
+
+            }catch (\Throwable $throwable){
+                $reponse = array(
+                    'code'=>'error',
                     'msg'=>'Erreur !<br>'. $throwable->getMessage()
                 );
             }
@@ -118,14 +153,14 @@ final class ProduitController extends AbstractController
             }
 
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -141,7 +176,7 @@ final class ProduitController extends AbstractController
 
             if ($produit){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'code_produit'=>$produit->getCodeProduit(),
                     'libelle_produit'=>$produit->getLibelle(),
@@ -149,14 +184,14 @@ final class ProduitController extends AbstractController
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un produit dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -175,7 +210,7 @@ final class ProduitController extends AbstractController
                 $tarif = $this->registry->getRepository(TarifProduitGrille::class)->findOneBy(['code_produit'=>$produit, 'code_grille'=>$grille]);
                 if ($tarif){
                     $reponse = array(
-                        'code'=>1,
+                        'code'=>'success',
                         'msg'=>'Success',
                         'code_produit'=>$produit->getCodeProduit(),
                         'libelle_produit'=>$produit->getLibelle(),
@@ -183,21 +218,51 @@ final class ProduitController extends AbstractController
                     );
                 } else {
                     $reponse = array(
-                        'code'=>0,
+                        'code'=>'error',
                         'msg'=>'Le fichier Tarif n\'a pas été trouvé !'
                     );
                 }
 
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un produit dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
+                'msg'=>'Erreur !<br>'. $throwable->getMessage()
+            );
+        }
+        return new JsonResponse($reponse);
+    }
+
+    #[Route('/getTarifProduitFromProforma/{id_produit}/{id_proforma}', name: 'get_tarif_produit_from_proforma')]
+    public function get_tarif_produit_from_proforma(int $id_produit, int $id_proforma): Response
+    {
+        $reponse = array();
+        try {
+            $produit = $this->registry->getRepository(Produit::class)->find($id_produit);
+            $proforma = $this->registry->getRepository(Proforma::class)->find($id_proforma);
+
+            if ($produit && $proforma ){
+                $pdts = $proforma->getLigneProformas();
+                foreach ($pdts as $pdt){
+                    if ($pdt->getCodeProduit() == $produit) {
+                        $reponse = array('code'=>'success','msg'=>'Success', 'tarif'=>$pdt->getPrix());
+                        return new JsonResponse($reponse);}
+                }
+            } else {
+                $reponse = array(
+                    'code'=>'error',
+                    'msg'=>'Merci de sélectionner un produit dans la liste !'
+                );
+            }
+        }catch (\Throwable $throwable){
+            $reponse = array(
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

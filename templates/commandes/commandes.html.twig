@@ -20,6 +20,7 @@
     </div>
 
     <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+    <script src="{{ asset('assets/js/ecbi/api/grille.js') }}"></script>
     <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
     <script src="{{ asset('assets/js/ecbi/api/client.js') }}"></script>
     <script src="{{ asset('assets/js/ecbi/api/commande.js') }}"></script>
@@ -29,13 +30,23 @@
 
     <script>
         let clientCommandes = []
+        let client = document.querySelector('#client');
+        let proforma = document.querySelector('#proforma');
+        let total_ht = document.querySelector('#total_ht');
+        let tva = document.querySelector('#tva');
+        let remise = document.querySelector('#remise');
+        let total_ttc = document.querySelector('#total_ttc');
+        let taux_remise = document.querySelector('#taux_remise');
+        let validiteProforma = document.querySelector('#validiteProforma');
+        let id_proforma = 0;
+        let taux_tva = {{ tva }};
+        let en_lettre = '';
 
         window.addEventListener("load", () => {
             setTimeout(() => {
                 loadListeCommandesInterface(document.getElementById("divCommandes"))
             }, 1000);
         });
-
 
     </script>
 {% endblock %}

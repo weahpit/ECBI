@@ -30,9 +30,7 @@
         <select name="criteres" id="criteres" STYLE="border: 1px solid #f7f3f2;background: linear-gradient(#bbf5e6, #afe4d7);">
             <option value="0">SELECTIONNEZ SVP UN CRITERE</option>
             <option value="CLIENTS">CLIENTS</option>
-            <option value="TYPES_CLIENT">TYPES CLIENTS</option>
             <option value="PRODUITS">PRODUITS</option>
-            <option value="TYPES_REGLEMENT">TYPES REGLEMENTS</option>
             <option value="QUALITES_PRODUITS">QUALITES PRODUITS</option>
             <option value="GRILLES">GRILLES TARIFAIRES</option>
             <option value="TYPES_REGLEMENT">TYPES REGLEMENTS</option>
@@ -59,16 +57,15 @@
                         <span class="input-group-text fw-bold">Code Client</span>
                         <input type="text" class="form-control fw-bold fs-5" id="code_client" aria-label="Code du client" aria-describedby="code_client" disabled>
                     </div>
-                    <div class="row">
-                        <div class="input-group input-group-sm mb-3 w-60 col-md-9">
+                        <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text fw-bold">Raison Sociale<span class="ms-2 text-danger fw-bold">*</span></span>
                             <input type="text" class="form-control" id="rs_client" required aria-label="Code du client" aria-describedby="rs_client" style="text-transform: uppercase;">
                         </div>
-                        <div class="input-group input-group-sm mb-3 w-35 col-md-2">
+                        <div class="input-group input-group-sm mb-3" style="width: 200px;">
                             <span class="input-group-text fw-bold">Sigle<span class="ms-2 text-danger fw-bold">*</span></span>
                             <input type="text" class="form-control" id="sigle" required aria-label="Code du client" aria-describedby="code_client" style="text-transform: uppercase;">
                         </div>
-                    </div>
+
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text fw-bold">Type Client<span class="ms-2 text-danger fw-bold">*</span></span>
                         <select  class="W-100" id="type_client" aria-label="type de client" required aria-describedby="type_client" style="width: 75%;">

@@ -55,13 +55,13 @@ final class GrilleController extends AbstractController
 
             }
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -87,13 +87,13 @@ final class GrilleController extends AbstractController
                     }
                 }
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
             }catch (\Throwable $throwable){
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Erreur !<br>'. $throwable->getMessage()
                 );
             }
@@ -109,20 +109,20 @@ final class GrilleController extends AbstractController
 
             if ($grille){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'libelle_grille'=>$grille->getLibelle()
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner une grille dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

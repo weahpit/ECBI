@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Customize;
+use App\Entity\User;
+use App\Repository\CustomizeRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,11 +14,17 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, ManagerRegistry $registry): Response
     {
-         if ($this->getUser()) {
+
+        $optionApp = $registry->getRepository(Customize::class)->findOneBy([]);
+        $users = $registry->getRepository(User::class)->findOneBy([]);
+
+         if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+
+        if ($this->getUser()) {
           return $this->redirectToRoute('app_tdb');
-      }
+        }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

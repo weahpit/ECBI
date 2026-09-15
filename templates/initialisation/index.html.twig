@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personnalisation application</title>
+    <link rel="stylesheet" href="assets/css/init.css">
+</head>
+<body>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="wizard-card">
+    <!-- Header -->
+    <div class="wizard-header">
+        <h1>⚙️ Personnalisation de votre application</h1>
+        <p>Complétez chaque étape pour finaliser la configuration</p>
+    </div>
+
+    <!-- Stepper -->
+    <nav class="stepper-nav" id="stepperNav">
+        <div class="step-col">
+            <div class="step-item active" data-step="0">
+                <div class="step-circle"><span class="step-num">1</span></div>
+            </div>
+            <div class="step-label">Enregistrement<br>Admin</div>
+        </div>
+
+        <div class="step-connector" id="conn0"></div>
+
+        <div class="step-col">
+            <div class="step-item" data-step="1">
+                <div class="step-circle"><span class="step-num">2</span></div>
+            </div>
+            <div class="step-label">Infos<br>Société</div>
+        </div>
+
+        <div class="step-connector" id="conn1"></div>
+
+        <div class="step-col">
+            <div class="step-item" data-step="2">
+                <div class="step-circle"><span class="step-num">3</span></div>
+            </div>
+            <div class="step-label">Personnali-<br>sation</div>
+        </div>
+    </nav>
+
+    <!-- Step Panels -->
+    <div class="wizard-body">
+
+        <!-- Étape 1 : Enregistrement Admin -->
+        <div class="step-panel active" id="step-0">
+            <div class="section-title"><span class="dot"></span> Enregistrement Administrateur</div>
+
+            <div class="form-row">
+                <div class="form-group" data-required>
+                    <label for="nom">Nom </label>
+                    <input type="text" id="nom" style="text-transform: uppercase" placeholder="Koffi">
+                    <div class="error-msg">Ce champ est requis</div>
+                </div>
+                <div class="form-group" data-required>
+                    <label for="prenoms">Prénoms </label>
+                    <input type="text" id="prenoms" style="text-transform: uppercase;" placeholder="Jean-Marc">
+                    <div class="error-msg">Ce champ est requis</div>
+                </div>
+            </div>
+
+            <div class="form-group" data-required data-type="email">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email" placeholder="jeanmarc.koffi@example.com">
+                <div class="error-msg">Veuillez saisir un e-mail valide</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" data-required data-minlength="6">
+                    <label for="motpasse">Mot de passe</label>
+                    <input type="password" id="motpasse" placeholder="Minimum 6 caractères">
+                    <div class="error-msg">Minimum 6 caractères requis</div>
+                </div>
+                <div class="form-group" data-required data-match="adminPass">
+                    <label for="comfirmeMotpasse">Confirmer le mot de passe</label>
+                    <input type="password" id="comfirmeMotpasse" placeholder="Retapez le mot de passe">
+                    <div class="error-msg">Les mots de passe ne correspondent pas</div>
+                </div>
+            </div>
+
+            <div class="form-group" data-required>
+                <label for="roleUser">Rôle</label>
+                <select id="roleUser" disabled>
+                    <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
+                </select>
+                <div class="error-msg">Veuillez sélectionner un rôle</div>
+            </div>
+        </div>
+
+        <!-- Étape 2 : Infos Société -->
+        <div class="step-panel" id="step-1">
+            <div class="section-title"><span class="dot"></span> Informations de la Société</div>
+
+            <div class="form-row">
+                <div class="form-group" data-required>
+                    <label for="rs">Raison sociale</label>
+                    <input type="text" id="rs" style="text-transform: uppercase" placeholder="Mon Entreprise SAS">
+                    <div class="error-msg">Ce champ est requis</div>
+                </div>
+                <div class="form-group" data-required>
+                    <label for="sigle">Sigle</label>
+                    <input type="text" id="sigle" style="text-transform: uppercase" placeholder="">
+                    <div class="error-msg">Ce champ est requis</div>
+                </div>
+            </div>
+            <div class="form-group" data-required data-type="email">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email_societe" placeholder="societe@example.com">
+                <div class="error-msg">Veuillez saisir un e-mail valide</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" data-required>
+                    <label for="pays">Pays</label>
+                    <select id="pays"></select>
+                </div>
+                <div class="form-group" data-required>
+                    <label for="ville">Ville</label>
+                    <select id="ville">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" data-required>
+                <label for="adresse">Adresse du siège</label>
+                <textarea id="adresse" placeholder="06, Rue de la vierge, Marcory Abidjan, Côte d'Ivoire"></textarea>
+                <div class="error-msg">Ce champ est requis</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" data-required>
+                    <label for="tel">Téléphone</label>
+                    <input type="tel" id="tel" placeholder="+225 07 23 45 67 89">
+                    <div class="error-msg">Ce champ est requis</div>
+                </div>
+                <div class="form-group" data-required>
+                    <label for="mobile">Mobile</label>
+                    <input type="tel" id="mobile" placeholder="+225 01 23 45 67 89">
+                    <div class="error-msg">Ce champ est requis</div>
+                </div>
+                <div class="form-group" data-type="url">
+                    <label for="siteweb">Site web</label>
+                    <input type="url" id="siteweb" placeholder="https://www.monentreprise.com">
+                    <div class="error-msg">Veuillez saisir une URL valide</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cc">Compte Contribuable</label>
+                    <input type="text" id="cc" style="text-transform: uppercase;">
+                </div>
+                <div class="form-group">
+                    <label for="rccim">Registre de Commerce</label>
+                    <input type="text" id="rccim" style="text-transform: uppercase;">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="type_imposition">Régime Imposition</label>
+
+                    <select id="type_imposition">
+                        <option value="">-- Sélectionnez un régime --</option>
+                        <option value="RE">Régime de l'entreprenant (RE)</option>
+                        <option value="RME">Régime des microentreprises (RME)</option>
+                        <option value="RSI">Régime réel simplifié (RSI)</option>
+                        <option value="RNI">Régime réel normal (RNI)</option>
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="centre_impots">Centre des impôts</label>
+                    <select id="centre_impots"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="secteur">Secteur d'activité</label>
+                <select id="secteur">
+                    <option value="0">-- Sélectionnez un secteur --</option>
+                    <option value="TECHNOLOGIE_INFORMATIQUE">Technologie / Informatique</option>
+                    <option value="FINANCE_BANQUE">Finance / Banque</option>
+                    <option value="AGRO_INDUSTRIE">Industriel / Agro-Industrie</option>
+                    <option value="SANTE_PHARMACIE">Santé / Pharmacie</option>
+                    <option value="COMMERCE">Commerce</option>
+                    <option value="AGRICULTURE">Agriculture</option>
+                    <option value="BTP">BTP / Génie Civil</option>
+                    <option value="">Autre</option>
+                </select>
+                <div class="error-msg">Veuillez sélectionner un secteur</div>
+            </div>
+            <div class="bg-light p-3 rounded shadow-sm form-group w-100" style="width: 100%;">
+                <center>
+                <span class="fw-bold d-block mb-2">Insérer un logo</span>
+
+                <!-- Bouton personnalisé -->
+                <label for="logoUpload" class="btn btn-primary  mb-2" style="cursor: pointer;">
+                    <img class="p-1" src="assets/icons/upload_image.png" alt="">
+                </label>
+                <input type="file" id="logoUpload" accept="image/*" hidden>
+
+                <!-- Contraintes -->
+                <small class="text-danger d-block mb-2">
+                    Image de moins de 200Ko
+                </small>
+                    <hr style="border:1px solid lightgrey; margin-top: 5px;margin-bottom: 5px;">
+                <!-- Aperçu -->
+                <img id="logoPreview"
+                     style="height:150px;width:100%;border:2px dashed #000;object-fit:cover;"
+                     src="" alt="Aperçu du logo">
+                </center>
+            </div>
+        </div>
+
+        <!-- Étape 3 : Personnalisation -->
+        <div class="step-panel" id="step-2">
+            <div class="section-title"><span class="dot"></span> Personnalisation de l'Interface</div>
+            <div class="form-group" data-required>
+                <label for="police">Police </label>
+                <select id="police" >
+                    <option value="Arial, serif">Arial</option>
+                    <option value="Cambria, serif">Cambria</option>
+                    <option value="'Century Gothic', sans-serif">Century Gothic</option>
+                    <option value="'Comic Sans MS',serif">Comic Sans MS</option>
+                    <option value="'Courier New',serif">Courier New</option>
+                    <option value="Roboto, serif">Roboto</option>
+                    <option value="'Segoe UI',serif">Segoe UI</option>
+                    <option value="Tahoma, serif">Tahoma</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="Verdana, serif">Verdana</option>
+                </select>
+                <div class="error-msg">Ce champ est requis</div>
+            </div>
+
+            <div class="form-group" data-required>
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="toggle-label">
+                            <label for="type_icone"> Icône de l'application</label>
+                            <small style="margin-bottom: 5px;">Charger une icone ou inscrivez un font Awesome</small>
+
+                        </div>
+                            <select id="type_icone" >
+                            <option value="Image">Image</option>
+                            <option value="Font_Awesome">Font awesome</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="upload_icone ms-4" id="upload_icone">
+                            <!-- Bouton personnalisé -->
+                            <label for="logoUploadIcone" class="" style="min-width:20px;border-radius: 0;margin-top: 20px;cursor: pointer;">
+                                <!-- <img class="p-1" src="assets/icons/upload_image.png" alt="">-->
+                                <img src="assets/icons/telecharger.png" alt="" style="font-size:16px; margin-right: 15px;" class="me-2">Charger
+                            </label>
+                            <input type="file" style="margin-top: 10px;" id="logoUploadIcone" accept="image/*" hidden>
+                            <!-- Aperçu -->
+                            <img id="logoPreviewIcone"
+                                 style="height: 20px;object-fit:cover;border: 0" src="" alt="">
+                        </div>
+                        <input type="text" class="form-control fw-bold text-secondary ms-2 mb-3 mt-3" id="icone_application" required aria-label="Code du client" aria-describedby="icone_application"  value="" style="display: none;" placeholder="Copier le code Font-Awsome ici Ex: <i class='fa fa-solid fa-star'></i>">
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="toggle-label">
+                            <label>Favicon</label>
+                            <small>Charger une icone à l'onglet de votre application</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="upload_favicon">
+                            <!-- Bouton personnalisé -->
+                            <label for="logoUploadFavicon" class="" style="min-width:20px;border-radius: 0;margin-top: 20px;cursor: pointer;">
+                                <!-- <img class="p-1" src="assets/icons/upload_image.png" alt="">-->
+                                <img src="assets/icons/telecharger.png" alt="" style="font-size:16px; margin-right: 15px;" class="me-2">Charger
+                            </label>
+                            <input type="file" id="logoUploadFavicon" accept="image/*" hidden>
+                            <!-- Aperçu -->
+                            <img id="logoPreviewFavicon"
+                                 style="height:20px;object-fit:cover;border: 0" src="" alt="">
+                        </div>
+                        </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="toggle-label">
+                            <label>Image login</label>
+                            <small>Votre logo à la page de connexion</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="upload_logoLogin">
+                            <!-- Bouton personnalisé -->
+                            <label for="logoUploadLogoLogin" class="" style="min-width:20px;border-radius: 0;margin-top: 20px;cursor: pointer;">
+                                <!-- <img class="p-1" src="assets/icons/upload_image.png" alt="">-->
+                                <img src="assets/icons/telecharger.png" alt="" style="font-size:16px; margin-right: 15px;" class="me-2">Charger
+                            </label>
+                            <input type="file" id="logoUploadLogoLogin" accept="image/*" hidden>
+                                <!-- Aperçu -->
+                            <img id="logoPreviewLogoLogin"
+                                 style="height:20px;object-fit:cover;border: 0" src="" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="toggle-label">
+                            <label for="type_fond">{Image / Couleur} de Fond</label>
+                            <small style="margin-bottom: 5px;">Charger une image de fond ou inscrivez une couleur</small>
+
+                        </div>
+                        <select id="type_fond" >
+                            <option value="Image">Image</option>
+                            <option value="Couleur">Couleur</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="upload_fond ms-4" id="upload_fond">
+                            <!-- Bouton personnalisé -->
+                            <label for="logoUploadFond" class="" style="min-width:20px;border-radius: 0;margin-top: 20px;cursor: pointer;">
+                                <!-- <img class="p-1" src="assets/icons/upload_image.png" alt="">-->
+                                <img src="assets/icons/telecharger.png" alt="" style="font-size:16px; margin-right: 15px;" class="me-2">Charger
+                            </label>
+                            <input type="file" style="margin-top: 10px;" id="logoUploadFond" accept="image/*" hidden>
+                            <!-- Aperçu -->
+                            <img id="logoPreviewFond"
+                                 style="height: 20px;object-fit:cover;border: 0" src="" alt="">
+                        </div>
+                        <input type="color" id="fond_application" required aria-label="Code du client" aria-describedby="fond_application"  value="" style="display: none;max-width: 40px;border: 0;">
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="toggle-label">
+                            <label>Couleur Barre Titre</label>
+                            <small>Couleur de la barre de titre</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select style="width: 25%;padding: 0;" id="couleur_barre_titre"></select>
+                        <label class="ms-4" id="lbl_couleur" style="height:30px;width: 100px;border-radius: 25px;border: #2563EB 1px solid;"></label>
+                        <!--<input type="color" class="form-control fw-bold text-secondary" style="max-width: 40px;border: 0;" id="couleur_barre_titre" required aria-label="Couleur Barre Titre" aria-describedby="couleur_barre_titre"  value="">-->
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <div class="toggle-label">
+                            <label for="prefix_application">Nom Votre application</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="prefix_application" required >
+                    </div>
+                </div>
+            </div>
+            <div class="form-row" style="margin-top: 20px;">
+            <div class="form-group">
+                <h3>Modèles de documents</h3>
+
+                <div class="form-row" style="width: 95%;border-bottom: 1px solid #dea700;border-top: 1px solid #dea700;background: rgba(255,255,255,0.50);margin-top: 10px;;">
+                    <div class="form-group" style="margin-top: 20px;">
+                        <div class="toggle-label">
+                            <label>Entête de votre structure</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <div class="upload_entete">
+                            <!-- Bouton personnalisé -->
+                            <label for="logoUploadEntete" class="btn mb-2 mt-2 mb-5 p-1 btn-light" style="min-width:20px;border-radius: 0;margin-top: 20px;cursor: pointer;">
+                                <!-- <img class="p-1" src="assets/icons/upload_image.png" alt="">-->
+                                <img src="assets/icons/telecharger.png" alt="" style="font-size:16px;margin-right: 10px;">Charger
+                            </label>
+                            <input type="file" id="logoUploadEntete" accept="application/pdf" hidden>
+                            <!-- Aperçu -->
+                            <embed  id="logoPreviewEntete" src="" type="application/pdf" width="400px" max-height="350px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="wizard-actions">
+        <button class="btn-prev" id="btnPrev" disabled>← Précédent</button>
+        <span class="step-counter" id="stepCounter">Étape 1 sur 3</span>
+        <button class="btn-next" id="btnNext">Suivant →</button>
+    </div>
+</div>
+
+<!-- Success Overlay -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+        <span class="icon">🎉</span>
+        <h2>Configuration terminée !</h2>
+        <p>Toutes les étapes ont été validées avec succès.</p>
+        <button class="btn-close" id="btnClose">Fermer</button>
+    </div>
+</div>
+<script src="{{ asset('assets/js/external/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/external/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+<script src="assets/js/ecbi/api/initialise.js"></script>
+<script src="assets/js/ecbi/api/customize.js"></script>
+<script src="assets/js/ecbi/api/pays.js"></script>
+<script>
+    /* ===== State ===== */
+    let currentStep = 0;
+    const totalSteps  = 3;
+    const validatedSteps = new Set();
+
+    /* ===== DOM refs ===== */
+    const stepItems   = document.querySelectorAll('.step-item');
+    const connectors  = [document.getElementById('conn0'), document.getElementById('conn1')];
+    const panels      = document.querySelectorAll('.step-panel');
+    const btnPrev     = document.getElementById('btnPrev');
+    const btnNext     = document.getElementById('btnNext');
+    const stepCounter = document.getElementById('stepCounter');
+    const overlay     = document.getElementById('successOverlay');
+    const container = document.getElementById('toastContainer');
+
+    getPays(2, document.getElementById("pays"))
+    document.getElementById("pays").addEventListener('change', ()=>{
+        getVillesByPays(document.getElementById("pays").value, 2, document.getElementById("ville"))
+        getVillesByPays(document.getElementById("pays").value, 2, document.getElementById("centre_impots"))
+    })
+    getCouleurApp(document.getElementById("couleur_barre_titre"), document.getElementById("lbl_couleur"))
+
+    /* =====,  Validation Engine ===== */
+    function validateStep(stepIndex) {
+        const panel   = panels[stepIndex];
+        const groups  = panel.querySelectorAll('.form-group[data-required]');
+        let valid     = true;
+
+        groups.forEach(g => {
+            const input   = g.querySelector('input, select, textarea');
+            if (!input) return;
+
+            const val     = input.value.trim();
+            const type    = g.dataset.type;
+            const minLen  = g.dataset.minlength;
+            const matchId = g.dataset.match;
+
+            let error = false;
+
+            // Required check
+            if (!val) error = true;
+
+            // Email check
+            if (!error && type === 'email') {
+                const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRe.test(val)) error = true;
+            }
+
+            // URL check
+            if (!error && type === 'url') {
+                try { new URL(val); } catch { error = true; }
+            }
+
+            // Min-length check
+            if (!error && minLen && val.length < parseInt(minLen)) error = true;
+
+            // Match check (password confirmation)
+            if (!error && matchId) {
+                const ref = document.getElementById(matchId);
+                if (ref && val !== ref.value.trim()) error = true;
+            }
+
+            // Color pickers — always have a value, skip empty check; check only if primary is untouched (not needed really)
+            if (input.type === 'color') error = false;
+
+            g.classList.toggle('error', error);
+            if (error) valid = false;
+        });
+
+        return valid;
+    }
+
+    /* ===== Clear Errors on Input ===== */
+    document.querySelectorAll('.form-group[data-required] input, .form-group[data-required] select, .form-group[data-required] textarea').forEach(el => {
+        const handler = () => {
+            el.closest('.form-group').classList.remove('error');
+        };
+        el.addEventListener('input', handler);
+        el.addEventListener('change', handler);
+    });
+
+    /* ===== Navigation ===== */
+    function goToStep(next, direction) {
+        const prev = currentStep;
+        currentStep = next;
+
+        // Update panels
+        panels[prev].classList.remove('active');
+        panels[prev].classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
+
+        panels[next].classList.remove('exit-left', 'exit-right');
+        // Small delay so transition fires
+        requestAnimationFrame(() => {
+            panels[next].classList.add('active');
+        });
+
+        // Clean up previous panel after transition
+        setTimeout(() => {
+            panels[prev].classList.remove('exit-left', 'exit-right');
+        }, 500);
+
+        // Update stepper
+        updateStepper();
+
+        // Update buttons
+        btnPrev.disabled = (next === 0);
+        if (next === totalSteps - 1) {
+            btnNext.innerHTML = '✅ Valider';
+            btnNext.className = 'btn-submit';
+        } else {
+            btnNext.innerHTML = 'Suivant →';
+            btnNext.className = 'btn-next';
+        }
+
+        stepCounter.textContent = `Étape ${next + 1} sur ${totalSteps}`;
+    }
+
+    function updateStepper() {
+        stepItems.forEach((item, i) => {
+            item.classList.remove('active', 'validated');
+            if (i === currentStep) item.classList.add('active');
+            else if (validatedSteps.has(i)) item.classList.add('validated');
+        });
+
+        connectors.forEach((c, i) => {
+            c.classList.remove('done', 'all-done');
+            if (validatedSteps.has(i) && validatedSteps.has(i + 1)) c.classList.add('all-done');
+            else if (validatedSteps.has(i)) c.classList.add('done');
+        });
+    }
+
+    /* ===== Next / Prev Handlers ===== */
+    btnNext.addEventListener('click', () => {
+        if (!validateStep(currentStep)) {
+            showToast(container, 'Veuillez corriger les erreurs avant de continuer', "error");
+            return;
+        }
+
+        validatedSteps.add(currentStep);
+
+        if (currentStep < totalSteps - 1) {
+            goToStep(currentStep + 1, 'next');
+            //showToast('Étape validée avec succès ✓', 'success');
+            showToast(container, 'Étape validée avec succès ✓', "success");
+        } else {
+            // Final submit
+            // showSuccess();
+            sendRequest()
+        }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        if (currentStep > 0) {
+            goToStep(currentStep - 1, 'prev');
+        }
+    });
+
+    /* ===== Toast ===== */
+    /*function showToast(msg, type) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'toastOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }*/
+
+    /* ===== Success Overlay ===== */
+    function showSuccess() {
+        overlay.classList.add('show');
+        showToast(container, 'Personnalisation enregistrée avec succès !', "info");
+        document.location.href = "{{ url('app_login') }}"
+    }
+
+    document.getElementById('btnClose').addEventListener('click', () => {
+        overlay.classList.remove('show');
+    });
+
+    /* ===== Click on validated step to go back ===== */
+    stepItems.forEach(item => {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => {
+            const s = parseInt(item.dataset.step);
+            if (validatedSteps.has(s) || s === currentStep) {
+                goToStep(s, s < currentStep ? 'prev' : 'next');
+            }
+        });
+    });
+
+    /* ===== Init ===== */
+    updateStepper();
+
+    uploadImage(document.getElementById('logoUpload'), document.getElementById('logoPreview'));
+    function uploadImage(button, image){
+        button.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Vérification taille < 200Ko
+                if (file.size > 1024 * 1024) {
+                    showToast(container, "L'image dépasse 1Mo !", "warning");
+                    e.target.value = "";
+                    return;
+                }
+                // Aperçu
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    image.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+
+    /* ===== Enregistrements ===== */
+    /*ADMIN*/
+    let nom = document.getElementById("nom");
+    let prenoms = document.getElementById("prenoms");
+    let email = document.getElementById("email");
+    let motpasse = document.getElementById("motpasse");
+    let comfirmeMotpasse = document.getElementById("comfirmeMotpasse");
+
+    /*SOCIETE*/
+    let rs = document.getElementById("rs");
+    let sigle = document.getElementById("sigle");
+    let email_societe = document.getElementById("email_societe");
+    let pays = document.getElementById("pays");
+    let ville = document.getElementById("ville");
+    let adresse = document.getElementById("adresse");
+    let tel = document.getElementById("tel");
+    let mobile = document.getElementById("mobile");
+    let siteweb = document.getElementById("siteweb");
+    let cc = document.getElementById("cc");
+    let rccim = document.getElementById("rccim");
+    let type_imposition = document.getElementById("type_imposition");
+    let centre_impots = document.getElementById("centre_impots");
+    let secteur = document.getElementById("secteur");
+    let logoUpload = document.getElementById("logoUpload");
+
+    /*PERSONNALISATION*/
+
+    let police = document.getElementById("police")
+    let type_icone = document.getElementById("type_icone")
+    let icone_application = document.getElementById("icone_application")
+    let couleur_barre_titre = document.getElementById("couleur_barre_titre")
+    let prefix_application = document.getElementById("prefix_application")
+    let type_fond = document.getElementById("type_fond")
+    let fond_application = document.getElementById("fond_application")
+
+    let logoUploadIcone = document.getElementById("logoUploadIcone")
+    let logoUploadFavicon = document.getElementById("logoUploadFavicon")
+    let logoUploadLogoLogin = document.getElementById("logoUploadLogoLogin")
+    let logoUploadEntete = document.getElementById("logoUploadEntete")
+    let logoUploadFond = document.getElementById("logoUploadFond")
+
+
+    uploadImage(logoUploadIcone, document.getElementById('logoPreviewIcone'));
+    uploadImage(logoUploadFavicon, document.getElementById('logoPreviewFavicon'));
+    uploadImage(logoUploadLogoLogin, document.getElementById('logoPreviewLogoLogin'));
+    uploadImage(logoUploadEntete, document.getElementById('logoPreviewEntete'));
+    uploadImage(logoUploadFond, document.getElementById('logoPreviewFond'));
+
+    // Functions
+    function getStateIconApp(value){
+        if (value === "Image"){
+            document.getElementById("upload_icone").style = "display:inline"
+            document.getElementById("icone_application").style = "display:none"
+        } else {
+            document.getElementById("upload_icone").style = "display:none"
+            document.getElementById("icone_application").style = "display:inline"
+        }
+    }
+    function getStateFondApp(value){
+        if (value === "Image"){
+            document.getElementById("upload_fond").style = "display:inline"
+            document.getElementById("fond_application").style = "display:none"
+        } else {
+            document.getElementById("upload_fond").style = "display:none"
+            document.getElementById("fond_application").style = "display:inline"
+        }
+    }
+
+
+    $("body").on('change','#type_icone', function(){ getStateIconApp(this.value); })
+    $("body").on('change','#type_fond', function(){ getStateFondApp(this.value); })
+
+
+
+    function enregistre_admin(){
+        let formData = new FormData()
+        formData.append("nom", nom.value)
+        formData.append("prenoms", prenoms.value)
+        formData.append("email", email.value)
+        formData.append("motpasse", motpasse.value)
+        formData.append("comfirmeMotpasse", comfirmeMotpasse.value)
+
+        saveAdmin(formData)
+    }
+
+
+    function enregistre_societe(){
+        let formData = new FormData()
+        formData.append("rs", rs.value)
+        formData.append("sigle", sigle.value)
+        formData.append("email_societe", email_societe.value)
+        formData.append("pays", pays.value)
+        formData.append("ville", ville.value)
+        formData.append("adresse", adresse.value)
+        formData.append("tel", tel.value)
+        formData.append("mobile", mobile.value)
+        formData.append("siteweb", siteweb.value)
+        formData.append("cc", cc.value)
+        formData.append("rccim", rccim.value)
+        formData.append("type_imposition", type_imposition.value)
+        formData.append("centre_impots", centre_impots.value)
+        formData.append("secteur", secteur.value)
+        formData.append("logoUpload", logoUpload.value)
+
+        saveInfosSociete(formData)
+    }
+
+
+    function enregistre_personnalisation(){
+        let formData = new FormData()
+
+        formData.append("police",  police.value)
+        formData.append("type_icone", type_icone.value)
+        formData.append("icone_application", icone_application.value)
+        formData.append("couleur_barre_titre", couleur_barre_titre.value)
+        formData.append("prefix_application", prefix_application.value)
+        formData.append("type_fond", type_fond.value)
+        formData.append("fond_application", fond_application.value)
+
+        // Upload des fichiers
+        const files_logoUploadIcone = logoUploadIcone.files;
+        const files_logoUploadFavicon = logoUploadFavicon.files;
+        const files_logoUploadLogoLogin = logoUploadLogoLogin.files;
+        const files_logoUploadEntete = logoUploadEntete.files;
+        const files_logoUploadFond = logoUploadFond.files;
+
+        formData.append("filename_icone", files_logoUploadIcone[0]);
+        formData.append("filename_favicon", files_logoUploadFavicon[0]);
+        formData.append("filename_logo_login", files_logoUploadLogoLogin[0]);
+        formData.append("filename_entete", files_logoUploadEntete[0]);
+        formData.append("filename_fond", files_logoUploadFond[0]);
+
+        saveCustomize(formData)
+    }
+
+    function sendRequest(){
+        enregistre_admin()
+        setTimeout(()=>{
+            enregistre_societe()
+        }, 1000)
+        setTimeout(()=>{
+            enregistre_personnalisation()
+        }, 2000)
+        setTimeout(()=>{
+            showSuccess()
+        }, 3000)
+
+    }
+</script>
+
+</body>
+</html>

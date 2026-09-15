@@ -1,3 +1,4 @@
+
 {% set optionsApp = options_app %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -6,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Connexion</title>
+    <link rel="icon" href="
+    {% if(optionsApp.getCustomize.favicon) %}
+            {{ asset('docs/modeles/') }}{{ optionsApp.getCustomize.favicon }}
+    {% endif %}
+        ">
     <style>
         body {
             margin: 0;
@@ -157,6 +163,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/resources/showToast.js') }}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const toggleEye = document.querySelector('.toggle-eye');
@@ -176,7 +183,11 @@
 
         // Notifications sur envoi des credentials
         {% if error %}
-            render_toast_value("Erreur ! Accès incorects...", 0)
+            showToast("Erreur ! Accès incorects...", {
+                title : "{{ optionsApp.getCustomize.prefixApplication }}",
+                type : 'error',
+                closable: true
+            })
         {% endif %}
     });
 

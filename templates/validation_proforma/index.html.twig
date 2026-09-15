@@ -83,7 +83,7 @@
                 type : 'POST',
                 success: function(response){
                     let listeProformas = JSON.parse(response);
-                    if (listeProformas.code === 1){
+                    if (listeProformas.code === 'success){
                         for (var i=0; i < listeProformas.data.length ; i++){
                             contenu_Proformas +='<li class="li_option" id="' + listeProformas.data[i].id + '">'
                             contenu_Proformas +='<h5 class="fw-bold mb-0">PF N° ' + listeProformas.data[i].ref_Proforma + '</h5><br>'
@@ -189,7 +189,7 @@
                 url : '/acceptProforma/' + this.id,
                 success : function(response){
                     render_toast_value(response.msg, response.code)
-                    if (response.code === 1){
+                    if (response.code === 'success){
                         getListeNonValidees()
                         details_proforma.innerHTML = `
                         <div class="text-center">

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Customize;
 use App\Entity\Notification;
 use App\Entity\Proforma;
+use App\Entity\User;
 use App\Services\NotificationService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +22,12 @@ final class TdbController extends AbstractController
     #[Route('/tdb', name: 'app_tdb')]
     public function index(): Response
     {
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
+
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+        if (!$this->getUser()){return  $this->redirectToRoute("app_login");}
+
         $proforma_en_attente = $this->registry->getRepository(Proforma::class)->count(['etat'=>false]);
         $proforma_validees = $this->registry->getRepository(Proforma::class)->count(['etat'=>true]);
         $clients = $this->registry->getRepository(Proforma::class)->count(['etat'=>false]);
@@ -65,7 +73,7 @@ final class TdbController extends AbstractController
             $registry->getManager()->persist($notif);
             $registry->getManager()->flush();
         }
-        $reponse = array('code'=>1, 'msg'=>'SUCCESS');
+        $reponse = array('code'=>'success', 'msg'=>'SUCCESS');
         return new JsonResponse($reponse);
     }
 

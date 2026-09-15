@@ -149,7 +149,7 @@
                 url : '/acceptProforma/' + this.id,
                 success : function(response){
                     render_toast_value(response.msg, response.code)
-                    if (response.code === 1){
+                    if (response.code === 'success){
                         document.location.href = '{{ path('app_proforma') }}'
                     }
                 }

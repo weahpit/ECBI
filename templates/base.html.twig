@@ -7,6 +7,11 @@
     <title>{% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="
+    {% if(optionsApp.getCustomize.favicon) %}
+            {{ asset('docs/modeles/') }}{{ optionsApp.getCustomize.favicon }}
+    {% endif %}
+        ">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <style>
         body {
@@ -19,16 +24,40 @@
             background-size: cover;
             font-family: {{ optionsApp.getCustomize.police|raw }};
         }
+
+        .navbar-nav .nav-link {
+            color: {% if(optionsApp.getCustomize.navbarFont) %} {{ optionsApp.getCustomize.navbarFont.textColor }} {% else %} #302f2f {% endif %} ;
+            margin: 0 2px;
+            transition: color 0.7s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #c78a03;
+            font-size: 24px;
+            background: transparent !important;
+            border-radius: 4px;
+            border-bottom: 2px solid {% if(optionsApp.getCustomize.navbarFont) %} {{ optionsApp.getCustomize.navbarFont.textColor }} {% else %} #302f2f {% endif %} ;
+            padding: 10px;
+            margin: 25px 5px 5px;
+        }
+        .navbar-brand:hover {
+            color: #FFFFFF;
+        }
+
     </style>
 </head>
 <body>
+
 {% block menu %}
     <!-- Menu horizontal -->
     <nav class="navbar-dark navbar-expand-sm" style="background: {{ optionsApp.getCustomize.barreTitreCouleur }}">
         <div class="container-fluid">
-            <a class="navbar-brand h2" href="{{ path('app_tdb') }}" >
+            <a class="navbar-brand h2 mt-2"  href="{{ path('app_tdb') }}" >
                 {% if(optionsApp.getCustomize.typeIconeApplication == 'Image') %}
-                    <img height="32px" src="docs/modeles/{{ optionsApp.getCustomize.iconeApplication }}" alt="">
+                    <img height="32px" src="docs/modeles/{{ optionsApp.getCustomize.iconeApplication }}" alt="" >
                 {% else %}
                     {{ optionsApp.getCustomize.iconeApplication }}
                 {% endif %}
@@ -38,8 +67,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            <div class="collapse navbar-collapse" style="color:black;" id="navbarNav">
+                <ul class="navbar-nav ms-auto mt-0 ">
                     <li class="nav-item"><a class="nav-link" href="#">🏠 Accueil</a></li>
 
                     <!-- Menu Commandes avec sous-menu -->
@@ -108,78 +137,79 @@
 
         {% endblock %}
     </div>
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-</div>
+
+<!-- Toast Container -->
+{#<div class="toast-container" id="toastContainer"></div>#}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('assets/js/external/jquery.js') }}"></script>
 <script src="{{ asset('assets/js/external/sweetalert/sweetalert.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/ecbi/resources/utilitaires.js') }}"></script>
+<script src="{{ asset('assets/js/ecbi/resources/showToast.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
 
-<script>
-    toggleDiv()
-    listeNotifications()
+    <script>
 
-    function toggleDiv() {
-        const panel = document.getElementById("panel");
-        panel.classList.toggle("open");
-    }
-
-    setInterval(()=>{
+        toggleDiv()
         listeNotifications()
-    }, 10000)
 
-    function listeNotifications(){
-        let notifs_div = document.querySelector(".notifs_div")
-        let ul_contenu = ''
-        $.ajax({
-            url : 'getCurrentNotifs',
-            type : 'POST',
-            success : function(response){
-                let rep = JSON.parse(response);
-                if (rep.nbNotifs > 0){
+        function toggleDiv() {
+            const panel = document.getElementById("panel");
+            panel.classList.toggle("open");
+        }
+
+        setInterval(()=>{
+            listeNotifications()
+        }, 10000)
+
+        function listeNotifications(){
+            let notifs_div = document.querySelector(".notifs_div")
+            let ul_contenu = ''
+            $.ajax({
+                url : 'getCurrentNotifs',
+                type : 'POST',
+                success : function(response){
+                    let rep = JSON.parse(response);
+                    if (rep.nbNotifs > 0){
 
 
-                    notifs_div.innerHTML = `
-                        <div class="dropdown" role="group">
-                                        <button id="notifBtn" class="btn btn-light position-relative mt-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa fa-bell"></i>
-                                            <span id="notifCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                    ${rep.nbNotifs}
-                                            </span>
-                                        </button>
-                                        <ul class="dropdown-menu" id="notifList"></ul>
-                        </div>
-                    `
-                    for (var i=0; i<rep.data.length;i++){
-                        ul_contenu += '<li><a class="dropdown-item a_notif" target="_blank" href="'+ rep.data[i].lien +'" id ="' + rep.data[i].id +'"><span class="fw-bold text-dark">' + rep.data[i].title + '</span><br>'
-                        if (rep.data[i].msg.length > 50){
-                            let value_slice = rep.data[i].msg;
-                            ul_contenu += '<small class="text-secondary fw-light" style="font-size: 11px;">' + value_slice.slice(0, 50) + '...</small></li>'
-                        } else {
-                            ul_contenu += '<small class="text-secondary fw-light" style="font-size: 11px;">' + rep.data[i].msg + '</small></li>'
+                        notifs_div.innerHTML = `
+                            <div class="dropdown" role="group">
+                                            <button id="notifBtn" class="btn btn-light position-relative mt-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-bell"></i>
+                                                <span id="notifCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                        ${rep.nbNotifs}
+                                                </span>
+                                            </button>
+                                            <ul class="dropdown-menu" id="notifList"></ul>
+                            </div>
+                        `
+                        for (var i=0; i<rep.data.length;i++){
+                            ul_contenu += '<li><a class="dropdown-item a_notif" target="_blank" href="'+ rep.data[i].lien +'" id ="' + rep.data[i].id +'"><span class="fw-bold text-dark">' + rep.data[i].title + '</span><br>'
+                            if (rep.data[i].msg.length > 50){
+                                let value_slice = rep.data[i].msg;
+                                ul_contenu += '<small class="text-secondary fw-light" style="font-size: 11px;">' + value_slice.slice(0, 50) + '...</small></li>'
+                            } else {
+                                ul_contenu += '<small class="text-secondary fw-light" style="font-size: 11px;">' + rep.data[i].msg + '</small></li>'
+                            }
+                            ul_contenu += '</a><hr>'
                         }
-                        ul_contenu += '</a><hr>'
+                        document.querySelector("#notifList").innerHTML = ul_contenu;
                     }
-                    document.querySelector("#notifList").innerHTML = ul_contenu;
                 }
-            }
-        })
-    }
+            })
+        }
 
-    $("body").on("click", ".a_notif", function (){
-        $.ajax({
-            url : 'setLu/' + this.id,
-            type : 'POST',
-            success : function(response){
+        $("body").on("click", ".a_notif", function (){
+            $.ajax({
+                url : 'setLu/' + this.id,
+                type : 'POST',
+                success : function(response){
 
-            }
+                }
+            });
         });
-    });
-
-</script>
+    </script>
 </body>
 </html>

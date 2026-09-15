@@ -19,7 +19,7 @@ class Customize
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo_login = null;
 
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $barre_titre_couleur = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -37,11 +37,14 @@ class Customize
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $fond_application = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $type_fond = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $entete_doc = null;
+
+    #[ORM\ManyToOne(inversedBy: 'customizes')]
+    private ?ColorApp $navbar_font = null;
 
     public function getId(): ?int
     {
@@ -164,6 +167,18 @@ class Customize
     public function setEnteteDoc(?string $entete_doc): static
     {
         $this->entete_doc = $entete_doc;
+
+        return $this;
+    }
+
+    public function getNavbarFont(): ?ColorApp
+    {
+        return $this->navbar_font;
+    }
+
+    public function setNavbarFont(?ColorApp $navbar_font): static
+    {
+        $this->navbar_font = $navbar_font;
 
         return $this;
     }

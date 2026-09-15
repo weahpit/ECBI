@@ -48,13 +48,13 @@ final class UserController extends AbstractController
 
             sort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -70,7 +70,7 @@ final class UserController extends AbstractController
 
             if ($user){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'nom_prenoms'=>$user->getNom(). " " . $user->getPrenoms(),
                     'nom'=>$user->getNom(),
@@ -84,14 +84,14 @@ final class UserController extends AbstractController
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un utilisateur dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

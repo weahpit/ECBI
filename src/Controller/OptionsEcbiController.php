@@ -37,13 +37,13 @@ final class OptionsEcbiController extends AbstractController
             }
             sort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -62,7 +62,7 @@ final class OptionsEcbiController extends AbstractController
                 $this->registry->getManager()->persist($optionEcbi);
                 $this->registry->getManager()->flush();
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Option mise à jour avec succès',
                     'id'=>$optionEcbi->getId(),
                     'libelle'=>$optionEcbi->getLibelle(),
@@ -71,14 +71,14 @@ final class OptionsEcbiController extends AbstractController
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Aucune option sélctionnée',
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

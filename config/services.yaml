@@ -12,6 +12,7 @@ parameters:
     logo_login : 'docs/modeles/'
     entete : 'docs/modeles/'
     fond_app : 'docs/modeles/'
+    logo : 'docs/modeles/'
 services:
     # default configuration for services in *this* file
     _defaults:

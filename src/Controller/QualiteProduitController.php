@@ -31,13 +31,13 @@ final class QualiteProduitController extends AbstractController
                 );
             }
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -53,20 +53,20 @@ final class QualiteProduitController extends AbstractController
 
             if ($qualite_produit){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'libelle'=>$qualite_produit->getLibelle()
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un qualite_produit dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

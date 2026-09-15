@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ClientEcbi;
+use App\Entity\Customize;
 use App\Entity\GrilleTarif;
 use App\Entity\InfosSociete;
 use App\Entity\LigneProforma;
@@ -11,6 +12,7 @@ use App\Entity\Produit;
 use App\Entity\Proforma;
 use App\Entity\ProgrammationAlerte;
 use App\Entity\TarifProduitGrille;
+use App\Entity\User;
 use App\Entity\Ville;
 use App\Services\NotificationService;
 use App\Services\Outils;
@@ -44,7 +46,12 @@ final class ProformaController extends AbstractController
     #[Route('/proforma', name: 'app_proforma')]
     public function index(): Response
     {
-        if (!$this->getUser()){return $this->redirectToRoute("app_login");}
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
+
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+        if (!$this->getUser()){return  $this->redirectToRoute("app_login");}
+
         $taux_tva = $this->registry->getRepository(OptionsEcbi::class)->findOneBy(['classname'=>'tva']);
         $validite = $this->registry->getRepository(OptionsEcbi::class)->findOneBy(['classname'=>'validite_proforma']);
 
@@ -74,13 +81,13 @@ final class ProformaController extends AbstractController
             }
             rsort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -110,14 +117,14 @@ final class ProformaController extends AbstractController
             }
             rsort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'nb'=>$i,
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -145,13 +152,13 @@ final class ProformaController extends AbstractController
                 }
 
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
             } else {
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Erreur Client !',
                     'data'=>$data
                 );
@@ -159,7 +166,7 @@ final class ProformaController extends AbstractController
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -225,7 +232,7 @@ final class ProformaController extends AbstractController
                     //dd( $ligne->produit);
                     $produit_tarif = $this->registry->getRepository(TarifProduitGrille::class)->find((int) $ligne->produit);
                     if ($produit_tarif) {
-                        $ligneProforma->setCodeProduit($produit_tarif->getCodeProduit());
+                        $ligneProforma->setCodeProduit($this->registry->getRepository(Produit::class)->find((int) $ligne->produit));
                         $ligneProforma->setCodeGrille($produit_tarif->getCodeGrille());
                         $ligneProforma->setCodeProforma($proforma);
                         $ligneProforma->setQte((int) $ligne->quantite);
@@ -308,7 +315,7 @@ final class ProformaController extends AbstractController
                     );
                 }
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'id'=>$proforma->getId(),
                     'numero_proforma'=>$proforma->getNumeroProforma(),
@@ -332,14 +339,14 @@ final class ProformaController extends AbstractController
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner une proforma dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -391,10 +398,13 @@ final class ProformaController extends AbstractController
 
 // Régime
             $pdf->SetXY(10, 57);
-            $pdf->Cell(0, 5, mb_convert_encoding('Régime d\'Imposition : '. $societe->getTypeImposition(), 'ISO-8859-1', 'UTF-8'));
+            $pdf->Cell(40, 5, mb_convert_encoding('Régime d\'Imposition : ', 'ISO-8859-1', 'UTF-8'));
+            $pdf->Cell(80, 5, mb_convert_encoding($societe->getTypeImposition(), 'ISO-8859-1', 'UTF-8'));
 
+            $centre_impots = $this->registry->getRepository(Ville::class)->find($societe->getCentreImpots()) ? $this->registry->getRepository(Ville::class)->find($societe->getCentreImpots())->getLibelle() : "";
             $pdf->SetXY(10, 62);
-            $pdf->Cell(0, 5, mb_convert_encoding('Centre des Impôts : '.$societe->getCentreImpots(), 'ISO-8859-1', 'UTF-8'));
+            $pdf->Cell(40, 5,  mb_convert_encoding('Centre des Impôts : ', 'ISO-8859-1', 'UTF-8'));
+            $pdf->Cell(80, 5,  mb_convert_encoding( $centre_impots, 'ISO-8859-1', 'UTF-8'));
 
 // Date
 
@@ -552,19 +562,19 @@ final class ProformaController extends AbstractController
                 $this->registry->getManager()->persist($proforma);
                 $this->registry->getManager()->flush();
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Proforma validée avec succès !'
                 );
             } else {
                 $reponse = array(
-                    'code'=>2,
+                    'code'=>'warning',
                     'msg'=>'Cette proforma n\'existe pas !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

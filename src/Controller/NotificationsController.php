@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\AlertesUsers;
+use App\Entity\Customize;
 use App\Entity\Produit;
 use App\Entity\ProgrammationAlerte;
 use App\Entity\User;
@@ -21,6 +22,12 @@ final class NotificationsController extends AbstractController
     #[Route('/notifications', name: 'app_notifications')]
     public function index(): Response
     {
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
+
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+        if (!$this->getUser()){return  $this->redirectToRoute("app_login");}
+
         return $this->render('notifications/index.html.twig', [
             'controller_name' => 'NotificationsController',
         ]);
@@ -45,7 +52,7 @@ final class NotificationsController extends AbstractController
 
                 sort($data);
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
@@ -55,7 +62,7 @@ final class NotificationsController extends AbstractController
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -86,7 +93,7 @@ final class NotificationsController extends AbstractController
 
                 sort($data);
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
@@ -96,7 +103,7 @@ final class NotificationsController extends AbstractController
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -120,13 +127,13 @@ final class NotificationsController extends AbstractController
 
                 sort($data);
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -151,19 +158,19 @@ final class NotificationsController extends AbstractController
                     $this->registry->getManager()->flush();
 
                    $reponse = array(
-                       'code'=>1,
+                       'code'=>'success',
                        'msg'=>'Alerte enregistrée avec succès !'
                    );
                } else {
                    $reponse = array(
-                       'code'=>2,
+                       'code'=>'warning',
                        'msg'=>'Merci de sélectionner l\'utilisateur et le type alerte!'
                    );
                }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

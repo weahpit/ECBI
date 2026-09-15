@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\AlertesUsers;
 use App\Entity\ClientEcbi;
 use App\Entity\Commande;
+use App\Entity\Customize;
 use App\Entity\Proforma;
 use App\Entity\TypeClient;
+use App\Entity\User;
 use App\Services\Outils;
 use Doctrine\Persistence\ManagerRegistry;
 use http\Client;
@@ -26,6 +28,12 @@ final class ValidationController extends AbstractController
     #[Route('/validateDoc/{type_doc}@{token}', name: 'app_validate_doc')]
     public function index(int $type_doc, string $token): Response
     {
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
+
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+        if (!$this->getUser()){return  $this->redirectToRoute("app_login");}
+
         if ($type_doc == 1){
             $doc = $this->registry->getRepository(Proforma::class)->findOneBy(['id_sys'=>$token]);
             if ($doc){
@@ -52,6 +60,12 @@ final class ValidationController extends AbstractController
     #[Route('/MesValidationsDeProforma', name: 'validation_proforma')]
     public function validation_proforma(): Response
     {
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
+
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+        if (!$this->getUser()){return  $this->redirectToRoute("app_login");}
+
         $alerte = $this->registry->getRepository(AlertesUsers::class)->findOneBy(['code_user'=>$this->getUser(), 'code_alerte'=>1]);
         if ($alerte){
             return $this->render('validation_proforma/index.html.twig',['proformas'=>$this->registry->getRepository(Proforma::class)->findBy(['etat'=>false],['date_proforma'=>"DESC"])]);

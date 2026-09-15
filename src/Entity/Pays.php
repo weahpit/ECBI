@@ -30,10 +30,17 @@ class Pays
     #[ORM\OneToMany(targetEntity: ClientEcbi::class, mappedBy: 'code_pays')]
     private Collection $clientEcbis;
 
+    /**
+     * @var Collection<int, InfosSociete>
+     */
+    #[ORM\OneToMany(targetEntity: InfosSociete::class, mappedBy: 'code_pays')]
+    private Collection $infosSocietes;
+
     public function __construct()
     {
         $this->villes = new ArrayCollection();
         $this->clientEcbis = new ArrayCollection();
+        $this->infosSocietes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,6 +114,36 @@ class Pays
             // set the owning side to null (unless already changed)
             if ($clientEcbi->getCodePays() === $this) {
                 $clientEcbi->setCodePays(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InfosSociete>
+     */
+    public function getInfosSocietes(): Collection
+    {
+        return $this->infosSocietes;
+    }
+
+    public function addInfosSociete(InfosSociete $infosSociete): static
+    {
+        if (!$this->infosSocietes->contains($infosSociete)) {
+            $this->infosSocietes->add($infosSociete);
+            $infosSociete->setCodePays($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInfosSociete(InfosSociete $infosSociete): static
+    {
+        if ($this->infosSocietes->removeElement($infosSociete)) {
+            // set the owning side to null (unless already changed)
+            if ($infosSociete->getCodePays() === $this) {
+                $infosSociete->setCodePays(null);
             }
         }
 

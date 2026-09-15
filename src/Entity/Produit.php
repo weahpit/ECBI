@@ -43,11 +43,18 @@ class Produit
     #[ORM\OneToMany(targetEntity: ProduitQualite::class, mappedBy: 'code_produit')]
     private Collection $produitQualites;
 
+    /**
+     * @var Collection<int, LigneCommande>
+     */
+    #[ORM\OneToMany(targetEntity: LigneCommande::class, mappedBy: 'code_produit')]
+    private Collection $ligneCommandes;
+
     public function __construct()
     {
         $this->ligneProformas = new ArrayCollection();
         $this->tarifProduitGrilles = new ArrayCollection();
         $this->produitQualites = new ArrayCollection();
+        $this->ligneCommandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +181,36 @@ class Produit
             // set the owning side to null (unless already changed)
             if ($produitQualite->getCodeProduit() === $this) {
                 $produitQualite->setCodeProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneCommande>
+     */
+    public function getLigneCommandes(): Collection
+    {
+        return $this->ligneCommandes;
+    }
+
+    public function addLigneCommande(LigneCommande $ligneCommande): static
+    {
+        if (!$this->ligneCommandes->contains($ligneCommande)) {
+            $this->ligneCommandes->add($ligneCommande);
+            $ligneCommande->setCodeProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneCommande(LigneCommande $ligneCommande): static
+    {
+        if ($this->ligneCommandes->removeElement($ligneCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneCommande->getCodeProduit() === $this) {
+                $ligneCommande->setCodeProduit(null);
             }
         }
 

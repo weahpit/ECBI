@@ -53,9 +53,16 @@ class Commande
     #[ORM\Column(nullable: true)]
     private ?bool $etat = null;
 
+    /**
+     * @var Collection<int, LigneCommande>
+     */
+    #[ORM\OneToMany(targetEntity: LigneCommande::class, mappedBy: 'code_commande')]
+    private Collection $ligneCommandes;
+
     public function __construct()
     {
         $this->fichierCommandes = new ArrayCollection();
+        $this->ligneCommandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -215,5 +222,35 @@ class Commande
     public function setIdSys(?string $id_sys): void
     {
         $this->id_sys = $id_sys;
+    }
+
+    /**
+     * @return Collection<int, LigneCommande>
+     */
+    public function getLigneCommandes(): Collection
+    {
+        return $this->ligneCommandes;
+    }
+
+    public function addLigneCommande(LigneCommande $ligneCommande): static
+    {
+        if (!$this->ligneCommandes->contains($ligneCommande)) {
+            $this->ligneCommandes->add($ligneCommande);
+            $ligneCommande->setCodeCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneCommande(LigneCommande $ligneCommande): static
+    {
+        if ($this->ligneCommandes->removeElement($ligneCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneCommande->getCodeCommande() === $this) {
+                $ligneCommande->setCodeCommande(null);
+            }
+        }
+
+        return $this;
     }
 }

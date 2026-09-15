@@ -65,6 +65,8 @@
     <script>
         let clientCommandes = []
         let numero_commande = "{{ numero_commande }}"
+        let id_proforma = "{{ numero_commande }}"
+        let taux_tva = {{ tva }};
 
         window.addEventListener("load", () => {
             setTimeout(() => {
@@ -101,6 +103,7 @@
 
         } )
         $("body").on('change', '#proforma', function(){
+            id_proforma = this.value;
             let div_infos_proforma = document.getElementById("div_proforma")
             if (this.value === "0"){
                 div_infos_proforma.innerHTML = ""

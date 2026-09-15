@@ -38,13 +38,13 @@ final class PaysController extends AbstractController
                 );
             }
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -60,20 +60,20 @@ final class PaysController extends AbstractController
 
             if ($pays){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'libelle'=>$pays->getLibelle()
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un pays dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -96,13 +96,13 @@ final class PaysController extends AbstractController
                         );
                     }
                     $reponse = array(
-                        'code'=>1,
+                        'code'=>'success',
                         'msg'=>'Success',
                         'data'=>$data
                     );
                 } else {
                     $reponse = array(
-                        'code'=>2,
+                        'code'=>'warning',
                         'msg'=>'Aucun pays sélectionné !',
                         'data'=>$data
                     );
@@ -110,7 +110,7 @@ final class PaysController extends AbstractController
 
             }catch (\Throwable $throwable){
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Erreur !<br>'. $throwable->getMessage()
                 );
             }

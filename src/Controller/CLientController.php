@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\ClientEcbi;
+use App\Entity\Customize;
 use App\Entity\Pays;
 use App\Entity\TypeClient;
+use App\Entity\User;
 use App\Services\Outils;
 use Doctrine\Persistence\ManagerRegistry;
 use http\Client;
@@ -24,7 +26,10 @@ final class CLientController extends AbstractController
     #[Route('/client', name: 'app_client')]
     public function index(): Response
     {
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
 
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
         return $this->render('client/index.html.twig');
     }
 
@@ -44,13 +49,13 @@ final class CLientController extends AbstractController
                 );
             }
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -66,7 +71,7 @@ final class CLientController extends AbstractController
 
             if ($client){
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'code_client'=>$client->getCode(),
                     'rs'=>$client->getRsClient(),
@@ -85,14 +90,14 @@ final class CLientController extends AbstractController
                 );
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner un client dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -113,13 +118,13 @@ final class CLientController extends AbstractController
                     );
                 }
                 $reponse = array(
-                    'code'=>1,
+                    'code'=>'success',
                     'msg'=>'Success',
                     'data'=>$data
                 );
             }catch (\Throwable $throwable){
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Erreur !<br>'. $throwable->getMessage()
                 );
             }

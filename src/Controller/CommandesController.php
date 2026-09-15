@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\ClientEcbi;
 use App\Entity\Commande;
+use App\Entity\Customize;
 use App\Entity\FichierCommande;
 use App\Entity\LigneProforma;
+use App\Entity\OptionsEcbi;
 use App\Entity\Proforma;
+use App\Entity\User;
 use App\Services\NotificationService;
 use App\Services\Outils;
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,8 +29,15 @@ final class CommandesController extends AbstractController
     #[Route('/NewOrder', name: 'app_commandes')]
     public function index(): Response
     {
+        $optionApp = $this->registry->getRepository(Customize::class)->findOneBy([]);
+        $users =  $this->registry->getRepository(User::class)->findOneBy([]);
+
+        if (!$optionApp || !$users){ return $this->redirectToRoute("app_initialisation");}
+        $taux_tva = $this->registry->getRepository(OptionsEcbi::class)->findOneBy(['classname'=>'tva']);
+
         return $this->render('commandes/index.html.twig', [
             'numero_commande' => $this->outils->generateNumeroCommande(),
+            'tva'=>$taux_tva? $taux_tva->getValue() : 0,
         ]);
     }
     #[Route('/OrdersList', name: 'liste_commandes')]
@@ -54,13 +64,13 @@ final class CommandesController extends AbstractController
 
             sort($data);
             $reponse = array(
-                'code'=>1,
+                'code'=>'success',
                 'msg'=>'Success',
                 'data'=>$data
             );
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }
@@ -155,7 +165,7 @@ final class CommandesController extends AbstractController
                             );
                         }
                         $reponse = array(
-                            'code'=>1,
+                            'code'=>'success',
                             'msg'=>'Success',
                             'numero_commande'=>$commande->getNumeroCommande(),
                             'date_commande'=>$commande->getDateCommande()->format('d/m/Y'),
@@ -178,14 +188,14 @@ final class CommandesController extends AbstractController
                 }
             } else {
                 $reponse = array(
-                    'code'=>0,
+                    'code'=>'error',
                     'msg'=>'Merci de sélectionner une commande dans la liste !'
                 );
             }
 
         }catch (\Throwable $throwable){
             $reponse = array(
-                'code'=>0,
+                'code'=>'error',
                 'msg'=>'Erreur !<br>'. $throwable->getMessage()
             );
         }

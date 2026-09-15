@@ -170,7 +170,7 @@
                                 const row = document.createElement("tr");
 
                                 row.innerHTML = `
-<td><input class="text-center fw-bold" id="row_number" type="text"  style="width: 50px;padding: 0;" readonly></td>
+                                <td><input class="text-center fw-bold" id="row_number" type="text"  style="width: 50px;padding: 0;" readonly></td>
                                 <td ><select class="produit" style="width: 200px;"></select></td>
                                 <td><input style="width:  75px;background: #fcf1d5;" type="number" class="qty text-center fw-bold" value="0"></td>
                                 <td><input style="width:  100px;padding: 0;" type="number" readonly class="prixUnitaire text-center fw-bold" value="0"></td>
@@ -200,9 +200,9 @@
 
 
                                 // supprimer la ligne
-                            row.querySelector(".removeRow").addEventListener("click", function() {
-                                row.remove();
-                            });
+                                row.querySelector(".removeRow").addEventListener("click", function() {
+                                    row.remove();
+                                });
 
                                 setTimeout(function (){
                                     $(".produit").on("change", function (){
@@ -279,15 +279,15 @@
             $('#total_ttc').val(net_commercial + parseFloat($('#tva').val()));
             ToutEnLettres()
         }
-                            function updateRowTotal(e) {
-                                const row = e.target.closest("tr");
-                                const qty = parseFloat(row.querySelector(".qty").value) || 0;
+        function updateRowTotal(e) {
+            const row = e.target.closest("tr");
+            const qty = parseFloat(row.querySelector(".qty").value) || 0;
 
-                                const price = parseFloat(row.querySelector(".prixUnitaire").value) || 0;
-                                const total = qty * price;
-                                row.querySelector(".total").value = (total.toFixed(0)).toLocaleString();
-                                calcul_montants()
-                            }
+            const price = parseFloat(row.querySelector(".prixUnitaire").value) || 0;
+            const total = qty * price;
+            row.querySelector(".total").value = (total.toFixed(0)).toLocaleString();
+            calcul_montants()
+        }
         function reinitialise(){
             resetForm(formProforma)
             $("#validiteProforma").val({{ validite }})

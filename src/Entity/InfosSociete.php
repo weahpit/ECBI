@@ -46,6 +46,18 @@ class InfosSociete
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $centre_impots = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $secteur_activite = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $siteweb = null;
+
+    #[ORM\ManyToOne(inversedBy: 'infosSocietes')]
+    private ?Pays $code_pays = null;
+
+    #[ORM\ManyToOne(inversedBy: 'infosSocietes')]
+    private ?Ville $code_ville = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,6 +191,54 @@ class InfosSociete
     public function setCentreImpots(?string $centre_impots): static
     {
         $this->centre_impots = $centre_impots;
+
+        return $this;
+    }
+
+    public function getSecteurActivite(): ?string
+    {
+        return $this->secteur_activite;
+    }
+
+    public function setSecteurActivite(?string $secteur_activite): static
+    {
+        $this->secteur_activite = $secteur_activite;
+
+        return $this;
+    }
+
+    public function getSiteweb(): ?string
+    {
+        return $this->siteweb;
+    }
+
+    public function setSiteweb(?string $siteweb): static
+    {
+        $this->siteweb = $siteweb;
+
+        return $this;
+    }
+
+    public function getCodePays(): ?Pays
+    {
+        return $this->code_pays;
+    }
+
+    public function setCodePays(?Pays $code_pays): static
+    {
+        $this->code_pays = $code_pays;
+
+        return $this;
+    }
+
+    public function getCodeVille(): ?Ville
+    {
+        return $this->code_ville;
+    }
+
+    public function setCodeVille(?Ville $code_ville): static
+    {
+        $this->code_ville = $code_ville;
 
         return $this;
     }
