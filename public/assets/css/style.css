@@ -1,0 +1,156 @@
+
+.navbar-dark {
+    background: linear-gradient(90deg, #2c2c2c, #444);
+}
+.navbar {
+    background: linear-gradient(270deg,
+    #faf8e5,   /* jaune très clair */ #fcefcb,   /* jaune doux */ #fce9cd,   /* orange pastel */ #fcddb0 /* orange clair */
+    );
+    background-size: 600% 600%;
+    animation: gradientShift 15s ease infinite;
+    color: #333;
+    padding: 1rem;
+}
+
+/* Animation du dégradé */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.dashboard {
+    padding: 5px;
+}
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.card-title {
+    font-weight: 600;
+    color: #333;
+}
+.icon {
+    font-size: 28px;
+    color: #f8c146;
+    margin-right: 10px;
+}
+select{
+    border: 1px solid lightgrey;
+    background: linear-gradient(#f3f3f3,#cccbcb);
+    min-width: 50px;
+}
+select option{
+    background-color: #fdfae5; /* jaune très clair adorable */
+    color: #333; /* texte foncé pour contraste */
+}
+input:focus, textarea:focus, select:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background: linear-gradient(135deg, #fff9c4, #ffcc80);
+}
+
+.loading-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    animation: fadeBlink 1.5s ease-in-out infinite;
+    margin-top: 50px;
+}
+
+@keyframes fadeBlink {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+fieldset {
+    border: 2px solid #3a2121;   /* couleur de la bordure */
+    border-radius: 4px;
+    padding: 4px;
+    position: relative;
+    margin-top: 25px;
+}
+
+legend {
+    font-weight: bold;
+    color: #3a2121;
+    padding: 0 8px;              /* espace autour du texte */
+    position: relative;
+    top: -15px;                  /* remonte la légende */
+    background: #fff;            /* masque la bordure derrière le texte */
+    margin-bottom: 10px;
+    width: 100px;
+}
+.encadrement {
+    background: rgba(255,255,255,0.52)
+}
+.alert-secondary{
+    background: radial-gradient(#ececec, #dedddd);
+}
+.panel {
+    overflow: hidden;          /* cache le contenu pendant l'animation */
+    max-height: 0;             /* état initial : fermé */
+    transition: max-height 0.5s ease-out, opacity 0.6s ease; /* animation fluide */
+    /*background: #f0f0f0;*/
+    padding: 0 10px;
+    overflow-y: scroll;
+}
+
+.panel.open {
+    max-height: 100vh;         /* état ouvert : hauteur minimum 400px */
+    opacity: 1;
+}
+.elegant-list {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.elegant-list li {
+    list-style: none;
+    background: #fff;
+    margin: 12px 0;
+    padding: 16px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.elegant-list li input {
+    margin-left: auto; /* pousse l'input à droite */
+    border: 1px solid #7c6302;
+    width: 400px;
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+
+.elegant-list li:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.elegant-list li::before {
+    content: "✓";
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #f9deba, #e5b503);
+    color: #0457d8;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}

@@ -53,7 +53,7 @@ final class CustomizeController extends AbstractController
     {
         $reponse = array();
         $data = array();
-        if (!$this->getUser()){return $this->redirectToRoute("app_login");}
+       /* if (!$this->getUser()){return $this->redirectToRoute("app_login");}*/
         try {
             $couleurs = $registry->getRepository(ColorApp::class)->findAll();
             foreach ($couleurs as $couleur){

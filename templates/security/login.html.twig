@@ -80,7 +80,7 @@
             color: #000;
         }
         .logo {
-            width: 100%;
+            /*width: 100%;*/
             margin-bottom: 5px;
             filter: grayscale(30%) brightness(1.1);
             transition: transform 0.3s ease;
@@ -134,7 +134,7 @@
 </head>
 <body>
 <div class="login-box">
-    <img src="docs/modeles/{{ optionsApp.getCustomize.logoLogin }}" alt="Logo Béton" class="logo">
+    <img src="docs/modeles/{{ optionsApp.getCustomize.logoLogin }}" alt="Logo Béton" class="logo" height="200px" width="150px" style="background-size: inherit">
     <h3>{{ optionsApp.getCustomize.prefixApplication }} <hr style="color: lightgrey;"><span class="badge mt-0" style="font-size: 16px;">Workflow</span></h3>
     <form method="post">
         <div class="input-group">
